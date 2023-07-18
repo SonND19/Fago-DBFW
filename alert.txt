@@ -1,0 +1,4 @@
+[06/Jul/2023 21:02:56] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: BLOCKED   
+[07/Jul/2023 10:14:41] User: son [**] Database: greendb [**] Query: select * from proxy; [**] Level_alert: BLOCKED   
+[08/Jul/2023 9:12:16] User: admin [**] Database: server [**] Query: select * from admin; [**] Level_alert: BLOCKED   
+[08/Jul/2023 9:26:40] User: admin [**] Database: server [**] Query: select * from admin; [**] Level_alert: WARN    

@@ -1,0 +1,5185 @@
+Terminals unused in grammar
+
+   ANY
+   NEWLINE
+
+
+State 258 conflicts: 1 shift/reduce
+State 363 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: command $end
+
+    1 command: %empty
+    2        | select_cmd
+    3        | insert_cmd
+    4        | show_cmd
+    5        | delete_cmd
+    6        | update_cmd
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+    8           | SELECT select_options select_exps
+
+    9 insert_cmd: INSERT INTO
+
+   10 show_cmd: SHOW
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM table_references where_cond order_cond limit_cond end_cond
+
+   12 update_cmd: UPDATE delete_option_list table_references SET set_cond where_cond order_cond limit_cond end_cond
+
+   13 select_options: %empty
+   14               | select_opts
+
+   15 select_opts: SELECT_OPT
+   16            | STRAIGHT_JOIN
+   17            | DISTINCT
+   18            | select_opts SELECT_OPT
+   19            | select_opts DISTINCT
+
+   20 delete_option_list: %empty
+   21                   | delete_option
+
+   22 delete_option: LOW_PRIORITY
+   23              | IGNORE
+   24              | QUICK
+   25              | delete_option LOW_PRIORITY
+   26              | delete_option IGNORE
+   27              | delete_option QUICK
+
+   28 delete_table_list: %empty
+   29                  | delete_table
+   30                  | delete_table_list COMMA delete_table
+
+   31 delete_table: simple_table
+   32             | simple_table DOT simple_table
+   33             | simple_table DOT simple_table DOT MULTIPLY
+   34             | simple_table DOT MULTIPLY
+
+   35 where_cond: %empty
+   36           | WHERE logical_exp_list
+
+   37 select_exps: select_exp
+   38            | select_exps COMMA select_exp
+
+   39 select_exp: math_op alias
+   40           | MULTIPLY
+   41           | STRING DOT MULTIPLY
+   42           | NAME DOT MULTIPLY
+   43           | STRING DOT STRING DOT MULTIPLY
+   44           | STRING DOT NAME DOT MULTIPLY
+   45           | NAME DOT STRING DOT MULTIPLY
+   46           | NAME DOT NAME DOT MULTIPLY
+
+   47 math_op: math_exp
+   48        | math_op comp_operator math_exp
+   49        | math_op NOT comp_operator math_exp
+   50        | case_fn
+   51        | cast_fn
+   52        | math_op BETWEEN math_exp AND math_exp
+   53        | math_op IN O_BRACE fn_args C_BRACE
+
+   54 logical_exp: math_exp
+   55            | math_exp comp_operator math_exp
+   56            | math_exp NOT comp_operator math_exp
+   57            | math_exp NOT math_exp
+   58            | math_exp comp_operator math_exp comp_operator math_exp
+   59            | math_exp NOT comp_operator math_exp comp_operator math_exp
+   60            | math_exp comp_operator math_exp NOT comp_operator math_exp
+   61            | math_exp NOT comp_operator math_exp NOT comp_operator math_exp
+   62            | math_exp IN O_BRACE fn_args C_BRACE
+   63            | math_exp NOT IN O_BRACE fn_args C_BRACE
+   64            | math_exp IN O_BRACE select_cmd C_BRACE
+   65            | math_exp NOT IN O_BRACE select_cmd C_BRACE
+   66            | math_exp BETWEEN math_exp AND math_exp
+   67            | O_BRACE logical_exp C_BRACE
+   68            | EXISTS O_BRACE select_cmd C_BRACE
+   69            | case_fn
+   70            | cast_fn
+
+   71 math_exp: field
+   72         | math_exp BASIC_OP field
+   73         | math_exp MULTIPLY field
+   74         | math_exp DIVIDE field
+   75         | math_exp SHIFT field
+   76         | math_exp BIT_OR field
+   77         | math_exp BIT_AND field
+   78         | BASIC_OP field
+   79         | math_exp POWER field
+   80         | O_BRACE math_exp C_BRACE
+   81         | O_BRACE select_cmd C_BRACE
+
+   82 field: table_field
+   83      | const_value
+   84      | fn
+   85      | simple_fn
+
+   86 table_field: STRING
+   87            | NAME
+   88            | STRING DOT STRING
+   89            | STRING DOT NAME
+   90            | NAME DOT STRING
+   91            | NAME DOT NAME
+
+   92 const_value: INTEGER
+   93            | VARIABLE
+   94            | Q_STRING
+   95            | DQ_STRING
+   96            | NULLX
+   97            | UNKNOWN
+   98            | TRUEX
+   99            | FALSEX
+
+  100 table_references: table_reference
+  101                 | table_references COMMA table_reference
+
+  102 table_reference: table_factor
+  103                | join_table
+
+  104 join_table: table_reference join_ops table_factor join_cond
+
+  105 join_ops: join_types JOIN
+  106         | JOIN
+  107         | STRAIGHT_JOIN
+
+  108 join_types: join_types JOIN_TYPE
+  109           | JOIN_TYPE
+
+  110 join_cond: %empty
+  111          | ON logical_exp_list
+  112          | USING O_BRACE math_exp C_BRACE
+
+  113 table_factor: simple_table alias index_hint
+  114             | simple_table DOT simple_table alias index_hint
+
+  115 simple_table: STRING
+  116             | NAME
+  117             | O_BRACE select_cmd C_BRACE
+
+  118 alias: %empty
+  119      | alias_str
+  120      | AS alias_str
+
+  121 alias_str: STRING
+  122          | NAME
+  123          | Q_STRING
+  124          | DQ_STRING
+
+  125 index_hint: %empty
+  126           | index_use INDEX O_BRACE index_list C_BRACE
+  127           | index_use INDEX FOR JOIN O_BRACE index_list C_BRACE
+
+  128 index_use: USE
+  129          | IGNORE
+  130          | FORCE
+
+  131 index_list: STRING
+  132           | index_list COMMA index_list
+
+  133 fn: STRING O_BRACE fn_args C_BRACE
+  134   | STRING O_BRACE DISTINCT fn_args order_cond C_BRACE
+  135   | CHAR_TYPE O_BRACE fn_args C_BRACE
+
+  136 simple_fn: STRING O_BRACE MULTIPLY C_BRACE
+  137          | STRING O_BRACE C_BRACE
+  138          | CHAR_TYPE O_BRACE C_BRACE
+
+  139 fn_args: math_exp
+  140        | fn_args COMMA fn_args
+
+  141 logical_operator: AND
+  142                 | OR
+  143                 | XOR
+
+  144 logical_exp_list: logical_exp_list logical_operator logical_exp
+  145                 | NOT logical_exp
+  146                 | logical_exp
+
+  147 comp_operator: EQUAL
+  148              | N_EQUAL
+  149              | LIKE
+  150              | REGEXP
+  151              | IS NOT
+  152              | IS
+
+  153 group_cond: %empty
+  154           | GROUP BY groupby_column_list sort_order
+
+  155 groupby_column_list: table_field
+  156                    | groupby_column_list COMMA table_field
+
+  157 sort_order: %empty
+  158           | ASC
+  159           | DESC
+
+  160 having_cond: %empty
+  161            | HAVING logical_exp_list
+
+  162 order_cond: %empty
+  163           | ORDER BY orderby_column_list sort_order
+
+  164 orderby_column_list: table_field
+  165                    | simple_fn
+  166                    | NULLX
+  167                    | orderby_column_list COMMA orderby_column_list
+
+  168 limit_cond: %empty
+  169           | LIMIT INTEGER
+  170           | LIMIT INTEGER COMMA INTEGER
+  171           | LIMIT INTEGER OFFSET INTEGER
+
+  172 procedure_cond: %empty
+  173               | PROCEDURE fn
+
+  174 union_cond: %empty
+  175           | UNION select_cmd
+
+  176 end_cond: %empty
+  177         | END
+
+  178 set_cond: table_field EQUAL math_exp
+  179         | table_field EQUAL DEFAULT
+  180         | set_cond COMMA field EQUAL math_exp
+  181         | set_cond COMMA field EQUAL DEFAULT
+
+  182 case_fn: CASE case_cases END_CASE
+  183        | CASE case_cases ELSE math_exp END_CASE
+  184        | CASE math_exp case_cases END_CASE
+  185        | CASE math_exp case_cases ELSE math_exp END_CASE
+
+  186 case_cases: case_case
+  187           | case_cases case_case
+
+  188 case_case: WHEN math_op THEN math_exp
+
+  189 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE C_BRACE
+  190        | CAST O_BRACE math_exp AS DATA_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  191        | CAST O_BRACE math_exp AS CHAR_TYPE C_BRACE
+  192        | CAST O_BRACE math_exp AS CHAR_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  193        | CAST O_BRACE math_exp AS BINARY C_BRACE
+  194        | CAST O_BRACE math_exp AS BINARY O_BRACE fn_args C_BRACE C_BRACE
+  195        | BINARY math_exp
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+SELECT (258) 7 8
+DISTINCT (259) 17 19 134
+SELECT_OPT (260) 15 18
+FROM (261) 7 11
+WHERE (262) 36
+JOIN_TYPE (263) 108 109
+JOIN (264) 105 106 127
+STRAIGHT_JOIN (265) 16 107
+INDEX (266) 126 127
+USE (267) 128
+ON (268) 111
+USING (269) 112
+IGNORE (270) 23 26 129
+FORCE (271) 130
+FOR (272) 127
+QUICK (273) 24 27
+LOW_PRIORITY (274) 22 25
+GROUP (275) 154
+ORDER (276) 163
+BY (277) 154 163
+ASC (278) 158
+DESC (279) 159
+INSERT (280) 9
+UPDATE (281) 12
+DELETE (282) 11
+SHOW (283) 10
+INTO (284) 9
+AS (285) 120 189 190 191 192 193 194
+IN (286) 53 62 63 64 65
+ANY (287)
+EXISTS (288) 68
+IS (289) 151 152
+NULLX (290) 96 166
+UNKNOWN (291) 97
+FALSEX (292) 99
+TRUEX (293) 98
+DEFAULT (294) 179 181
+EQUAL (295) 147 178 179 180 181
+N_EQUAL (296) 148
+MULTIPLY (297) 33 34 40 41 42 43 44 45 46 73 136
+DIVIDE (298) 74
+POWER (299) 79
+NEWLINE (300)
+SHIFT (301) 75
+BASIC_OP (302) 72 78
+BETWEEN (303) 52 66
+CASE (304) 182 183 184 185
+WHEN (305) 188
+THEN (306) 188
+ELSE (307) 183 185
+END_CASE (308) 182 183 184 185
+CAST (309) 189 190 191 192 193 194
+DATA_TYPE (310) 189 190
+BINARY (311) 193 194 195
+CHAR_TYPE (312) 135 138 191 192
+REGEXP (313) 150
+HAVING (314) 161
+LIMIT (315) 169 170 171
+OFFSET (316) 171
+PROCEDURE (317) 173
+UNION (318) 175
+SET (319) 12
+INTEGER (320) 92 169 170 171
+STRING (321) 41 43 44 45 86 88 89 90 115 121 131 133 134 136 137
+Q_STRING (322) 94 123
+DQ_STRING (323) 95 124
+NAME (324) 42 44 45 46 87 89 90 91 116 122
+VARIABLE (325) 93
+O_BRACE (326) 53 62 63 64 65 67 68 80 81 112 117 126 127 133 134 135
+    136 137 138 189 190 191 192 193 194
+C_BRACE (327) 53 62 63 64 65 67 68 80 81 112 117 126 127 133 134 135
+    136 137 138 189 190 191 192 193 194
+BIT_OR (328) 76
+BIT_AND (329) 77
+NEG (330)
+END (331) 177
+COMMA (332) 30 38 101 132 140 156 167 170 180 181
+DOT (333) 32 33 34 41 42 43 44 45 46 88 89 90 91 114
+AND (334) 52 66 141
+OR (335) 142
+NOT (336) 49 56 57 59 60 61 63 65 145 151
+XOR (337) 143
+LIKE (338) 149
+
+
+Nonterminals, with rules where they appear
+
+$accept (84)
+    on left: 0
+command (85)
+    on left: 1 2 3 4 5 6, on right: 0
+select_cmd (86)
+    on left: 7 8, on right: 2 64 65 68 81 117 175
+insert_cmd (87)
+    on left: 9, on right: 3
+show_cmd (88)
+    on left: 10, on right: 4
+delete_cmd (89)
+    on left: 11, on right: 5
+update_cmd (90)
+    on left: 12, on right: 6
+select_options (91)
+    on left: 13 14, on right: 7 8
+select_opts (92)
+    on left: 15 16 17 18 19, on right: 14 18 19
+delete_option_list (93)
+    on left: 20 21, on right: 11 12
+delete_option (94)
+    on left: 22 23 24 25 26 27, on right: 21 25 26 27
+delete_table_list (95)
+    on left: 28 29 30, on right: 11 30
+delete_table (96)
+    on left: 31 32 33 34, on right: 29 30
+where_cond (97)
+    on left: 35 36, on right: 7 11 12
+select_exps (98)
+    on left: 37 38, on right: 7 8 38
+select_exp (99)
+    on left: 39 40 41 42 43 44 45 46, on right: 37 38
+math_op (100)
+    on left: 47 48 49 50 51 52 53, on right: 39 48 49 52 53 188
+logical_exp (101)
+    on left: 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70, on right:
+    67 144 145 146
+math_exp (102)
+    on left: 71 72 73 74 75 76 77 78 79 80 81, on right: 47 48 49 52
+    54 55 56 57 58 59 60 61 62 63 64 65 66 72 73 74 75 76 77 79 80
+    112 139 178 180 183 184 185 188 189 190 191 192 193 194 195
+field (103)
+    on left: 82 83 84 85, on right: 71 72 73 74 75 76 77 78 79 180
+    181
+table_field (104)
+    on left: 86 87 88 89 90 91, on right: 82 155 156 164 178 179
+const_value (105)
+    on left: 92 93 94 95 96 97 98 99, on right: 83
+table_references (106)
+    on left: 100 101, on right: 7 11 12 101
+table_reference (107)
+    on left: 102 103, on right: 100 101 104
+join_table (108)
+    on left: 104, on right: 103
+join_ops (109)
+    on left: 105 106 107, on right: 104
+join_types (110)
+    on left: 108 109, on right: 105 108
+join_cond (111)
+    on left: 110 111 112, on right: 104
+table_factor (112)
+    on left: 113 114, on right: 102 104
+simple_table (113)
+    on left: 115 116 117, on right: 31 32 33 34 113 114
+alias (114)
+    on left: 118 119 120, on right: 39 113 114
+alias_str (115)
+    on left: 121 122 123 124, on right: 119 120
+index_hint (116)
+    on left: 125 126 127, on right: 113 114
+index_use (117)
+    on left: 128 129 130, on right: 126 127
+index_list (118)
+    on left: 131 132, on right: 126 127 132
+fn (119)
+    on left: 133 134 135, on right: 84 173
+simple_fn (120)
+    on left: 136 137 138, on right: 85 165
+fn_args (121)
+    on left: 139 140, on right: 53 62 63 133 134 135 140 190 192 194
+logical_operator (122)
+    on left: 141 142 143, on right: 144
+logical_exp_list (123)
+    on left: 144 145 146, on right: 36 111 144 161
+comp_operator (124)
+    on left: 147 148 149 150 151 152, on right: 48 49 55 56 58 59 60
+    61
+group_cond (125)
+    on left: 153 154, on right: 7
+groupby_column_list (126)
+    on left: 155 156, on right: 154 156
+sort_order (127)
+    on left: 157 158 159, on right: 154 163
+having_cond (128)
+    on left: 160 161, on right: 7
+order_cond (129)
+    on left: 162 163, on right: 7 11 12 134
+orderby_column_list (130)
+    on left: 164 165 166 167, on right: 163 167
+limit_cond (131)
+    on left: 168 169 170 171, on right: 7 11 12
+procedure_cond (132)
+    on left: 172 173, on right: 7
+union_cond (133)
+    on left: 174 175, on right: 7
+end_cond (134)
+    on left: 176 177, on right: 7 11 12
+set_cond (135)
+    on left: 178 179 180 181, on right: 12 180 181
+case_fn (136)
+    on left: 182 183 184 185, on right: 50 69
+case_cases (137)
+    on left: 186 187, on right: 182 183 184 185 187
+case_case (138)
+    on left: 188, on right: 186 187
+cast_fn (139)
+    on left: 189 190 191 192 193 194 195, on right: 51 70
+
+
+State 0
+
+    0 $accept: . command $end
+
+    SELECT  shift, and go to state 1
+    INSERT  shift, and go to state 2
+    UPDATE  shift, and go to state 3
+    DELETE  shift, and go to state 4
+    SHOW    shift, and go to state 5
+
+    $default  reduce using rule 1 (command)
+
+    command     go to state 6
+    select_cmd  go to state 7
+    insert_cmd  go to state 8
+    show_cmd    go to state 9
+    delete_cmd  go to state 10
+    update_cmd  go to state 11
+
+
+State 1
+
+    7 select_cmd: SELECT . select_options select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+    8           | SELECT . select_options select_exps
+
+    DISTINCT       shift, and go to state 12
+    SELECT_OPT     shift, and go to state 13
+    STRAIGHT_JOIN  shift, and go to state 14
+
+    $default  reduce using rule 13 (select_options)
+
+    select_options  go to state 15
+    select_opts     go to state 16
+
+
+State 2
+
+    9 insert_cmd: INSERT . INTO
+
+    INTO  shift, and go to state 17
+
+
+State 3
+
+   12 update_cmd: UPDATE . delete_option_list table_references SET set_cond where_cond order_cond limit_cond end_cond
+
+    IGNORE        shift, and go to state 18
+    QUICK         shift, and go to state 19
+    LOW_PRIORITY  shift, and go to state 20
+
+    $default  reduce using rule 20 (delete_option_list)
+
+    delete_option_list  go to state 21
+    delete_option       go to state 22
+
+
+State 4
+
+   11 delete_cmd: DELETE . delete_option_list delete_table_list FROM table_references where_cond order_cond limit_cond end_cond
+
+    IGNORE        shift, and go to state 18
+    QUICK         shift, and go to state 19
+    LOW_PRIORITY  shift, and go to state 20
+
+    $default  reduce using rule 20 (delete_option_list)
+
+    delete_option_list  go to state 23
+    delete_option       go to state 22
+
+
+State 5
+
+   10 show_cmd: SHOW .
+
+    $default  reduce using rule 10 (show_cmd)
+
+
+State 6
+
+    0 $accept: command . $end
+
+    $end  shift, and go to state 24
+
+
+State 7
+
+    2 command: select_cmd .
+
+    $default  reduce using rule 2 (command)
+
+
+State 8
+
+    3 command: insert_cmd .
+
+    $default  reduce using rule 3 (command)
+
+
+State 9
+
+    4 command: show_cmd .
+
+    $default  reduce using rule 4 (command)
+
+
+State 10
+
+    5 command: delete_cmd .
+
+    $default  reduce using rule 5 (command)
+
+
+State 11
+
+    6 command: update_cmd .
+
+    $default  reduce using rule 6 (command)
+
+
+State 12
+
+   17 select_opts: DISTINCT .
+
+    $default  reduce using rule 17 (select_opts)
+
+
+State 13
+
+   15 select_opts: SELECT_OPT .
+
+    $default  reduce using rule 15 (select_opts)
+
+
+State 14
+
+   16 select_opts: STRAIGHT_JOIN .
+
+    $default  reduce using rule 16 (select_opts)
+
+
+State 15
+
+    7 select_cmd: SELECT select_options . select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+    8           | SELECT select_options . select_exps
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    MULTIPLY   shift, and go to state 29
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 36
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 39
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    select_exps  go to state 42
+    select_exp   go to state 43
+    math_op      go to state 44
+    math_exp     go to state 45
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_fn      go to state 51
+    cast_fn      go to state 52
+
+
+State 16
+
+   14 select_options: select_opts .
+   18 select_opts: select_opts . SELECT_OPT
+   19            | select_opts . DISTINCT
+
+    DISTINCT    shift, and go to state 53
+    SELECT_OPT  shift, and go to state 54
+
+    $default  reduce using rule 14 (select_options)
+
+
+State 17
+
+    9 insert_cmd: INSERT INTO .
+
+    $default  reduce using rule 9 (insert_cmd)
+
+
+State 18
+
+   23 delete_option: IGNORE .
+
+    $default  reduce using rule 23 (delete_option)
+
+
+State 19
+
+   24 delete_option: QUICK .
+
+    $default  reduce using rule 24 (delete_option)
+
+
+State 20
+
+   22 delete_option: LOW_PRIORITY .
+
+    $default  reduce using rule 22 (delete_option)
+
+
+State 21
+
+   12 update_cmd: UPDATE delete_option_list . table_references SET set_cond where_cond order_cond limit_cond end_cond
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    table_references  go to state 58
+    table_reference   go to state 59
+    join_table        go to state 60
+    table_factor      go to state 61
+    simple_table      go to state 62
+
+
+State 22
+
+   21 delete_option_list: delete_option .
+   25 delete_option: delete_option . LOW_PRIORITY
+   26              | delete_option . IGNORE
+   27              | delete_option . QUICK
+
+    IGNORE        shift, and go to state 63
+    QUICK         shift, and go to state 64
+    LOW_PRIORITY  shift, and go to state 65
+
+    $default  reduce using rule 21 (delete_option_list)
+
+
+State 23
+
+   11 delete_cmd: DELETE delete_option_list . delete_table_list FROM table_references where_cond order_cond limit_cond end_cond
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    $default  reduce using rule 28 (delete_table_list)
+
+    delete_table_list  go to state 66
+    delete_table       go to state 67
+    simple_table       go to state 68
+
+
+State 24
+
+    0 $accept: command $end .
+
+    $default  accept
+
+
+State 25
+
+   96 const_value: NULLX .
+
+    $default  reduce using rule 96 (const_value)
+
+
+State 26
+
+   97 const_value: UNKNOWN .
+
+    $default  reduce using rule 97 (const_value)
+
+
+State 27
+
+   99 const_value: FALSEX .
+
+    $default  reduce using rule 99 (const_value)
+
+
+State 28
+
+   98 const_value: TRUEX .
+
+    $default  reduce using rule 98 (const_value)
+
+
+State 29
+
+   40 select_exp: MULTIPLY .
+
+    $default  reduce using rule 40 (select_exp)
+
+
+State 30
+
+   78 math_exp: BASIC_OP . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 71
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 31
+
+  182 case_fn: CASE . case_cases END_CASE
+  183        | CASE . case_cases ELSE math_exp END_CASE
+  184        | CASE . math_exp case_cases END_CASE
+  185        | CASE . math_exp case_cases ELSE math_exp END_CASE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    WHEN       shift, and go to state 72
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 73
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_cases   go to state 74
+    case_case    go to state 75
+
+
+State 32
+
+  189 cast_fn: CAST . O_BRACE math_exp AS DATA_TYPE C_BRACE
+  190        | CAST . O_BRACE math_exp AS DATA_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  191        | CAST . O_BRACE math_exp AS CHAR_TYPE C_BRACE
+  192        | CAST . O_BRACE math_exp AS CHAR_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  193        | CAST . O_BRACE math_exp AS BINARY C_BRACE
+  194        | CAST . O_BRACE math_exp AS BINARY O_BRACE fn_args C_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 76
+
+
+State 33
+
+  195 cast_fn: BINARY . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 77
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 34
+
+  135 fn: CHAR_TYPE . O_BRACE fn_args C_BRACE
+  138 simple_fn: CHAR_TYPE . O_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 78
+
+
+State 35
+
+   92 const_value: INTEGER .
+
+    $default  reduce using rule 92 (const_value)
+
+
+State 36
+
+   41 select_exp: STRING . DOT MULTIPLY
+   43           | STRING . DOT STRING DOT MULTIPLY
+   44           | STRING . DOT NAME DOT MULTIPLY
+   86 table_field: STRING .
+   88            | STRING . DOT STRING
+   89            | STRING . DOT NAME
+  133 fn: STRING . O_BRACE fn_args C_BRACE
+  134   | STRING . O_BRACE DISTINCT fn_args order_cond C_BRACE
+  136 simple_fn: STRING . O_BRACE MULTIPLY C_BRACE
+  137          | STRING . O_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 79
+    DOT      shift, and go to state 80
+
+    $default  reduce using rule 86 (table_field)
+
+
+State 37
+
+   94 const_value: Q_STRING .
+
+    $default  reduce using rule 94 (const_value)
+
+
+State 38
+
+   95 const_value: DQ_STRING .
+
+    $default  reduce using rule 95 (const_value)
+
+
+State 39
+
+   42 select_exp: NAME . DOT MULTIPLY
+   45           | NAME . DOT STRING DOT MULTIPLY
+   46           | NAME . DOT NAME DOT MULTIPLY
+   87 table_field: NAME .
+   90            | NAME . DOT STRING
+   91            | NAME . DOT NAME
+
+    DOT  shift, and go to state 81
+
+    $default  reduce using rule 87 (table_field)
+
+
+State 40
+
+   93 const_value: VARIABLE .
+
+    $default  reduce using rule 93 (const_value)
+
+
+State 41
+
+   80 math_exp: O_BRACE . math_exp C_BRACE
+   81         | O_BRACE . select_cmd C_BRACE
+
+    SELECT     shift, and go to state 1
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    select_cmd   go to state 82
+    math_exp     go to state 83
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 42
+
+    7 select_cmd: SELECT select_options select_exps . FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+    8           | SELECT select_options select_exps .
+   38 select_exps: select_exps . COMMA select_exp
+
+    FROM   shift, and go to state 84
+    COMMA  shift, and go to state 85
+
+    $default  reduce using rule 8 (select_cmd)
+
+
+State 43
+
+   37 select_exps: select_exp .
+
+    $default  reduce using rule 37 (select_exps)
+
+
+State 44
+
+   39 select_exp: math_op . alias
+   48 math_op: math_op . comp_operator math_exp
+   49        | math_op . NOT comp_operator math_exp
+   52        | math_op . BETWEEN math_exp AND math_exp
+   53        | math_op . IN O_BRACE fn_args C_BRACE
+
+    AS         shift, and go to state 86
+    IN         shift, and go to state 87
+    IS         shift, and go to state 88
+    EQUAL      shift, and go to state 89
+    N_EQUAL    shift, and go to state 90
+    BETWEEN    shift, and go to state 91
+    REGEXP     shift, and go to state 92
+    STRING     shift, and go to state 93
+    Q_STRING   shift, and go to state 94
+    DQ_STRING  shift, and go to state 95
+    NAME       shift, and go to state 96
+    NOT        shift, and go to state 97
+    LIKE       shift, and go to state 98
+
+    $default  reduce using rule 118 (alias)
+
+    alias          go to state 99
+    alias_str      go to state 100
+    comp_operator  go to state 101
+
+
+State 45
+
+   47 math_op: math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 47 (math_op)
+
+
+State 46
+
+   71 math_exp: field .
+
+    $default  reduce using rule 71 (math_exp)
+
+
+State 47
+
+   82 field: table_field .
+
+    $default  reduce using rule 82 (field)
+
+
+State 48
+
+   83 field: const_value .
+
+    $default  reduce using rule 83 (field)
+
+
+State 49
+
+   84 field: fn .
+
+    $default  reduce using rule 84 (field)
+
+
+State 50
+
+   85 field: simple_fn .
+
+    $default  reduce using rule 85 (field)
+
+
+State 51
+
+   50 math_op: case_fn .
+
+    $default  reduce using rule 50 (math_op)
+
+
+State 52
+
+   51 math_op: cast_fn .
+
+    $default  reduce using rule 51 (math_op)
+
+
+State 53
+
+   19 select_opts: select_opts DISTINCT .
+
+    $default  reduce using rule 19 (select_opts)
+
+
+State 54
+
+   18 select_opts: select_opts SELECT_OPT .
+
+    $default  reduce using rule 18 (select_opts)
+
+
+State 55
+
+  115 simple_table: STRING .
+
+    $default  reduce using rule 115 (simple_table)
+
+
+State 56
+
+  116 simple_table: NAME .
+
+    $default  reduce using rule 116 (simple_table)
+
+
+State 57
+
+  117 simple_table: O_BRACE . select_cmd C_BRACE
+
+    SELECT  shift, and go to state 1
+
+    select_cmd  go to state 109
+
+
+State 58
+
+   12 update_cmd: UPDATE delete_option_list table_references . SET set_cond where_cond order_cond limit_cond end_cond
+  101 table_references: table_references . COMMA table_reference
+
+    SET    shift, and go to state 110
+    COMMA  shift, and go to state 111
+
+
+State 59
+
+  100 table_references: table_reference .
+  104 join_table: table_reference . join_ops table_factor join_cond
+
+    JOIN_TYPE      shift, and go to state 112
+    JOIN           shift, and go to state 113
+    STRAIGHT_JOIN  shift, and go to state 114
+
+    $default  reduce using rule 100 (table_references)
+
+    join_ops    go to state 115
+    join_types  go to state 116
+
+
+State 60
+
+  103 table_reference: join_table .
+
+    $default  reduce using rule 103 (table_reference)
+
+
+State 61
+
+  102 table_reference: table_factor .
+
+    $default  reduce using rule 102 (table_reference)
+
+
+State 62
+
+  113 table_factor: simple_table . alias index_hint
+  114             | simple_table . DOT simple_table alias index_hint
+
+    AS         shift, and go to state 86
+    STRING     shift, and go to state 93
+    Q_STRING   shift, and go to state 94
+    DQ_STRING  shift, and go to state 95
+    NAME       shift, and go to state 96
+    DOT        shift, and go to state 117
+
+    $default  reduce using rule 118 (alias)
+
+    alias      go to state 118
+    alias_str  go to state 100
+
+
+State 63
+
+   26 delete_option: delete_option IGNORE .
+
+    $default  reduce using rule 26 (delete_option)
+
+
+State 64
+
+   27 delete_option: delete_option QUICK .
+
+    $default  reduce using rule 27 (delete_option)
+
+
+State 65
+
+   25 delete_option: delete_option LOW_PRIORITY .
+
+    $default  reduce using rule 25 (delete_option)
+
+
+State 66
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list . FROM table_references where_cond order_cond limit_cond end_cond
+   30 delete_table_list: delete_table_list . COMMA delete_table
+
+    FROM   shift, and go to state 119
+    COMMA  shift, and go to state 120
+
+
+State 67
+
+   29 delete_table_list: delete_table .
+
+    $default  reduce using rule 29 (delete_table_list)
+
+
+State 68
+
+   31 delete_table: simple_table .
+   32             | simple_table . DOT simple_table
+   33             | simple_table . DOT simple_table DOT MULTIPLY
+   34             | simple_table . DOT MULTIPLY
+
+    DOT  shift, and go to state 121
+
+    $default  reduce using rule 31 (delete_table)
+
+
+State 69
+
+   86 table_field: STRING .
+   88            | STRING . DOT STRING
+   89            | STRING . DOT NAME
+  133 fn: STRING . O_BRACE fn_args C_BRACE
+  134   | STRING . O_BRACE DISTINCT fn_args order_cond C_BRACE
+  136 simple_fn: STRING . O_BRACE MULTIPLY C_BRACE
+  137          | STRING . O_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 79
+    DOT      shift, and go to state 122
+
+    $default  reduce using rule 86 (table_field)
+
+
+State 70
+
+   87 table_field: NAME .
+   90            | NAME . DOT STRING
+   91            | NAME . DOT NAME
+
+    DOT  shift, and go to state 123
+
+    $default  reduce using rule 87 (table_field)
+
+
+State 71
+
+   78 math_exp: BASIC_OP field .
+
+    $default  reduce using rule 78 (math_exp)
+
+
+State 72
+
+  188 case_case: WHEN . math_op THEN math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_op      go to state 124
+    math_exp     go to state 45
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_fn      go to state 51
+    cast_fn      go to state 52
+
+
+State 73
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  184 case_fn: CASE math_exp . case_cases END_CASE
+  185        | CASE math_exp . case_cases ELSE math_exp END_CASE
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    WHEN      shift, and go to state 72
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    case_cases  go to state 125
+    case_case   go to state 75
+
+
+State 74
+
+  182 case_fn: CASE case_cases . END_CASE
+  183        | CASE case_cases . ELSE math_exp END_CASE
+  187 case_cases: case_cases . case_case
+
+    WHEN      shift, and go to state 72
+    ELSE      shift, and go to state 126
+    END_CASE  shift, and go to state 127
+
+    case_case  go to state 128
+
+
+State 75
+
+  186 case_cases: case_case .
+
+    $default  reduce using rule 186 (case_cases)
+
+
+State 76
+
+  189 cast_fn: CAST O_BRACE . math_exp AS DATA_TYPE C_BRACE
+  190        | CAST O_BRACE . math_exp AS DATA_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  191        | CAST O_BRACE . math_exp AS CHAR_TYPE C_BRACE
+  192        | CAST O_BRACE . math_exp AS CHAR_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  193        | CAST O_BRACE . math_exp AS BINARY C_BRACE
+  194        | CAST O_BRACE . math_exp AS BINARY O_BRACE fn_args C_BRACE C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 129
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 77
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  195 cast_fn: BINARY math_exp .
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 195 (cast_fn)
+
+
+State 78
+
+  135 fn: CHAR_TYPE O_BRACE . fn_args C_BRACE
+  138 simple_fn: CHAR_TYPE O_BRACE . C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+    C_BRACE    shift, and go to state 130
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 132
+
+
+State 79
+
+  133 fn: STRING O_BRACE . fn_args C_BRACE
+  134   | STRING O_BRACE . DISTINCT fn_args order_cond C_BRACE
+  136 simple_fn: STRING O_BRACE . MULTIPLY C_BRACE
+  137          | STRING O_BRACE . C_BRACE
+
+    DISTINCT   shift, and go to state 133
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    MULTIPLY   shift, and go to state 134
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+    C_BRACE    shift, and go to state 135
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 136
+
+
+State 80
+
+   41 select_exp: STRING DOT . MULTIPLY
+   43           | STRING DOT . STRING DOT MULTIPLY
+   44           | STRING DOT . NAME DOT MULTIPLY
+   88 table_field: STRING DOT . STRING
+   89            | STRING DOT . NAME
+
+    MULTIPLY  shift, and go to state 137
+    STRING    shift, and go to state 138
+    NAME      shift, and go to state 139
+
+
+State 81
+
+   42 select_exp: NAME DOT . MULTIPLY
+   45           | NAME DOT . STRING DOT MULTIPLY
+   46           | NAME DOT . NAME DOT MULTIPLY
+   90 table_field: NAME DOT . STRING
+   91            | NAME DOT . NAME
+
+    MULTIPLY  shift, and go to state 140
+    STRING    shift, and go to state 141
+    NAME      shift, and go to state 142
+
+
+State 82
+
+   81 math_exp: O_BRACE select_cmd . C_BRACE
+
+    C_BRACE  shift, and go to state 143
+
+
+State 83
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+   80         | O_BRACE math_exp . C_BRACE
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    C_BRACE   shift, and go to state 144
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+
+State 84
+
+    7 select_cmd: SELECT select_options select_exps FROM . table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    table_references  go to state 145
+    table_reference   go to state 59
+    join_table        go to state 60
+    table_factor      go to state 61
+    simple_table      go to state 62
+
+
+State 85
+
+   38 select_exps: select_exps COMMA . select_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    MULTIPLY   shift, and go to state 29
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 36
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 39
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    select_exp   go to state 146
+    math_op      go to state 44
+    math_exp     go to state 45
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_fn      go to state 51
+    cast_fn      go to state 52
+
+
+State 86
+
+  120 alias: AS . alias_str
+
+    STRING     shift, and go to state 93
+    Q_STRING   shift, and go to state 94
+    DQ_STRING  shift, and go to state 95
+    NAME       shift, and go to state 96
+
+    alias_str  go to state 147
+
+
+State 87
+
+   53 math_op: math_op IN . O_BRACE fn_args C_BRACE
+
+    O_BRACE  shift, and go to state 148
+
+
+State 88
+
+  151 comp_operator: IS . NOT
+  152              | IS .
+
+    NOT  shift, and go to state 149
+
+    $default  reduce using rule 152 (comp_operator)
+
+
+State 89
+
+  147 comp_operator: EQUAL .
+
+    $default  reduce using rule 147 (comp_operator)
+
+
+State 90
+
+  148 comp_operator: N_EQUAL .
+
+    $default  reduce using rule 148 (comp_operator)
+
+
+State 91
+
+   52 math_op: math_op BETWEEN . math_exp AND math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 150
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 92
+
+  150 comp_operator: REGEXP .
+
+    $default  reduce using rule 150 (comp_operator)
+
+
+State 93
+
+  121 alias_str: STRING .
+
+    $default  reduce using rule 121 (alias_str)
+
+
+State 94
+
+  123 alias_str: Q_STRING .
+
+    $default  reduce using rule 123 (alias_str)
+
+
+State 95
+
+  124 alias_str: DQ_STRING .
+
+    $default  reduce using rule 124 (alias_str)
+
+
+State 96
+
+  122 alias_str: NAME .
+
+    $default  reduce using rule 122 (alias_str)
+
+
+State 97
+
+   49 math_op: math_op NOT . comp_operator math_exp
+
+    IS       shift, and go to state 88
+    EQUAL    shift, and go to state 89
+    N_EQUAL  shift, and go to state 90
+    REGEXP   shift, and go to state 92
+    LIKE     shift, and go to state 98
+
+    comp_operator  go to state 151
+
+
+State 98
+
+  149 comp_operator: LIKE .
+
+    $default  reduce using rule 149 (comp_operator)
+
+
+State 99
+
+   39 select_exp: math_op alias .
+
+    $default  reduce using rule 39 (select_exp)
+
+
+State 100
+
+  119 alias: alias_str .
+
+    $default  reduce using rule 119 (alias)
+
+
+State 101
+
+   48 math_op: math_op comp_operator . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 152
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 102
+
+   73 math_exp: math_exp MULTIPLY . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 153
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 103
+
+   74 math_exp: math_exp DIVIDE . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 154
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 104
+
+   79 math_exp: math_exp POWER . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 155
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 105
+
+   75 math_exp: math_exp SHIFT . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 156
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 106
+
+   72 math_exp: math_exp BASIC_OP . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 157
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 107
+
+   76 math_exp: math_exp BIT_OR . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 158
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 108
+
+   77 math_exp: math_exp BIT_AND . field
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 159
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 109
+
+  117 simple_table: O_BRACE select_cmd . C_BRACE
+
+    C_BRACE  shift, and go to state 160
+
+
+State 110
+
+   12 update_cmd: UPDATE delete_option_list table_references SET . set_cond where_cond order_cond limit_cond end_cond
+
+    STRING  shift, and go to state 161
+    NAME    shift, and go to state 70
+
+    table_field  go to state 162
+    set_cond     go to state 163
+
+
+State 111
+
+  101 table_references: table_references COMMA . table_reference
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    table_reference  go to state 164
+    join_table       go to state 60
+    table_factor     go to state 61
+    simple_table     go to state 62
+
+
+State 112
+
+  109 join_types: JOIN_TYPE .
+
+    $default  reduce using rule 109 (join_types)
+
+
+State 113
+
+  106 join_ops: JOIN .
+
+    $default  reduce using rule 106 (join_ops)
+
+
+State 114
+
+  107 join_ops: STRAIGHT_JOIN .
+
+    $default  reduce using rule 107 (join_ops)
+
+
+State 115
+
+  104 join_table: table_reference join_ops . table_factor join_cond
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    table_factor  go to state 165
+    simple_table  go to state 62
+
+
+State 116
+
+  105 join_ops: join_types . JOIN
+  108 join_types: join_types . JOIN_TYPE
+
+    JOIN_TYPE  shift, and go to state 166
+    JOIN       shift, and go to state 167
+
+
+State 117
+
+  114 table_factor: simple_table DOT . simple_table alias index_hint
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    simple_table  go to state 168
+
+
+State 118
+
+  113 table_factor: simple_table alias . index_hint
+
+    USE     shift, and go to state 169
+    IGNORE  shift, and go to state 170
+    FORCE   shift, and go to state 171
+
+    $default  reduce using rule 125 (index_hint)
+
+    index_hint  go to state 172
+    index_use   go to state 173
+
+
+State 119
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM . table_references where_cond order_cond limit_cond end_cond
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    table_references  go to state 174
+    table_reference   go to state 59
+    join_table        go to state 60
+    table_factor      go to state 61
+    simple_table      go to state 62
+
+
+State 120
+
+   30 delete_table_list: delete_table_list COMMA . delete_table
+
+    STRING   shift, and go to state 55
+    NAME     shift, and go to state 56
+    O_BRACE  shift, and go to state 57
+
+    delete_table  go to state 175
+    simple_table  go to state 68
+
+
+State 121
+
+   32 delete_table: simple_table DOT . simple_table
+   33             | simple_table DOT . simple_table DOT MULTIPLY
+   34             | simple_table DOT . MULTIPLY
+
+    MULTIPLY  shift, and go to state 176
+    STRING    shift, and go to state 55
+    NAME      shift, and go to state 56
+    O_BRACE   shift, and go to state 57
+
+    simple_table  go to state 177
+
+
+State 122
+
+   88 table_field: STRING DOT . STRING
+   89            | STRING DOT . NAME
+
+    STRING  shift, and go to state 178
+    NAME    shift, and go to state 179
+
+
+State 123
+
+   90 table_field: NAME DOT . STRING
+   91            | NAME DOT . NAME
+
+    STRING  shift, and go to state 180
+    NAME    shift, and go to state 181
+
+
+State 124
+
+   48 math_op: math_op . comp_operator math_exp
+   49        | math_op . NOT comp_operator math_exp
+   52        | math_op . BETWEEN math_exp AND math_exp
+   53        | math_op . IN O_BRACE fn_args C_BRACE
+  188 case_case: WHEN math_op . THEN math_exp
+
+    IN       shift, and go to state 87
+    IS       shift, and go to state 88
+    EQUAL    shift, and go to state 89
+    N_EQUAL  shift, and go to state 90
+    BETWEEN  shift, and go to state 91
+    THEN     shift, and go to state 182
+    REGEXP   shift, and go to state 92
+    NOT      shift, and go to state 97
+    LIKE     shift, and go to state 98
+
+    comp_operator  go to state 101
+
+
+State 125
+
+  184 case_fn: CASE math_exp case_cases . END_CASE
+  185        | CASE math_exp case_cases . ELSE math_exp END_CASE
+  187 case_cases: case_cases . case_case
+
+    WHEN      shift, and go to state 72
+    ELSE      shift, and go to state 183
+    END_CASE  shift, and go to state 184
+
+    case_case  go to state 128
+
+
+State 126
+
+  183 case_fn: CASE case_cases ELSE . math_exp END_CASE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 185
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 127
+
+  182 case_fn: CASE case_cases END_CASE .
+
+    $default  reduce using rule 182 (case_fn)
+
+
+State 128
+
+  187 case_cases: case_cases case_case .
+
+    $default  reduce using rule 187 (case_cases)
+
+
+State 129
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  189 cast_fn: CAST O_BRACE math_exp . AS DATA_TYPE C_BRACE
+  190        | CAST O_BRACE math_exp . AS DATA_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  191        | CAST O_BRACE math_exp . AS CHAR_TYPE C_BRACE
+  192        | CAST O_BRACE math_exp . AS CHAR_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  193        | CAST O_BRACE math_exp . AS BINARY C_BRACE
+  194        | CAST O_BRACE math_exp . AS BINARY O_BRACE fn_args C_BRACE C_BRACE
+
+    AS        shift, and go to state 186
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+
+State 130
+
+  138 simple_fn: CHAR_TYPE O_BRACE C_BRACE .
+
+    $default  reduce using rule 138 (simple_fn)
+
+
+State 131
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  139 fn_args: math_exp .
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 139 (fn_args)
+
+
+State 132
+
+  135 fn: CHAR_TYPE O_BRACE fn_args . C_BRACE
+  140 fn_args: fn_args . COMMA fn_args
+
+    C_BRACE  shift, and go to state 187
+    COMMA    shift, and go to state 188
+
+
+State 133
+
+  134 fn: STRING O_BRACE DISTINCT . fn_args order_cond C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 189
+
+
+State 134
+
+  136 simple_fn: STRING O_BRACE MULTIPLY . C_BRACE
+
+    C_BRACE  shift, and go to state 190
+
+
+State 135
+
+  137 simple_fn: STRING O_BRACE C_BRACE .
+
+    $default  reduce using rule 137 (simple_fn)
+
+
+State 136
+
+  133 fn: STRING O_BRACE fn_args . C_BRACE
+  140 fn_args: fn_args . COMMA fn_args
+
+    C_BRACE  shift, and go to state 191
+    COMMA    shift, and go to state 188
+
+
+State 137
+
+   41 select_exp: STRING DOT MULTIPLY .
+
+    $default  reduce using rule 41 (select_exp)
+
+
+State 138
+
+   43 select_exp: STRING DOT STRING . DOT MULTIPLY
+   88 table_field: STRING DOT STRING .
+
+    DOT  shift, and go to state 192
+
+    $default  reduce using rule 88 (table_field)
+
+
+State 139
+
+   44 select_exp: STRING DOT NAME . DOT MULTIPLY
+   89 table_field: STRING DOT NAME .
+
+    DOT  shift, and go to state 193
+
+    $default  reduce using rule 89 (table_field)
+
+
+State 140
+
+   42 select_exp: NAME DOT MULTIPLY .
+
+    $default  reduce using rule 42 (select_exp)
+
+
+State 141
+
+   45 select_exp: NAME DOT STRING . DOT MULTIPLY
+   90 table_field: NAME DOT STRING .
+
+    DOT  shift, and go to state 194
+
+    $default  reduce using rule 90 (table_field)
+
+
+State 142
+
+   46 select_exp: NAME DOT NAME . DOT MULTIPLY
+   91 table_field: NAME DOT NAME .
+
+    DOT  shift, and go to state 195
+
+    $default  reduce using rule 91 (table_field)
+
+
+State 143
+
+   81 math_exp: O_BRACE select_cmd C_BRACE .
+
+    $default  reduce using rule 81 (math_exp)
+
+
+State 144
+
+   80 math_exp: O_BRACE math_exp C_BRACE .
+
+    $default  reduce using rule 80 (math_exp)
+
+
+State 145
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references . where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+  101 table_references: table_references . COMMA table_reference
+
+    WHERE  shift, and go to state 196
+    COMMA  shift, and go to state 111
+
+    $default  reduce using rule 35 (where_cond)
+
+    where_cond  go to state 197
+
+
+State 146
+
+   38 select_exps: select_exps COMMA select_exp .
+
+    $default  reduce using rule 38 (select_exps)
+
+
+State 147
+
+  120 alias: AS alias_str .
+
+    $default  reduce using rule 120 (alias)
+
+
+State 148
+
+   53 math_op: math_op IN O_BRACE . fn_args C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 198
+
+
+State 149
+
+  151 comp_operator: IS NOT .
+
+    $default  reduce using rule 151 (comp_operator)
+
+
+State 150
+
+   52 math_op: math_op BETWEEN math_exp . AND math_exp
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+    AND       shift, and go to state 199
+
+
+State 151
+
+   49 math_op: math_op NOT comp_operator . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 200
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 152
+
+   48 math_op: math_op comp_operator math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 48 (math_op)
+
+
+State 153
+
+   73 math_exp: math_exp MULTIPLY field .
+
+    $default  reduce using rule 73 (math_exp)
+
+
+State 154
+
+   74 math_exp: math_exp DIVIDE field .
+
+    $default  reduce using rule 74 (math_exp)
+
+
+State 155
+
+   79 math_exp: math_exp POWER field .
+
+    $default  reduce using rule 79 (math_exp)
+
+
+State 156
+
+   75 math_exp: math_exp SHIFT field .
+
+    $default  reduce using rule 75 (math_exp)
+
+
+State 157
+
+   72 math_exp: math_exp BASIC_OP field .
+
+    $default  reduce using rule 72 (math_exp)
+
+
+State 158
+
+   76 math_exp: math_exp BIT_OR field .
+
+    $default  reduce using rule 76 (math_exp)
+
+
+State 159
+
+   77 math_exp: math_exp BIT_AND field .
+
+    $default  reduce using rule 77 (math_exp)
+
+
+State 160
+
+  117 simple_table: O_BRACE select_cmd C_BRACE .
+
+    $default  reduce using rule 117 (simple_table)
+
+
+State 161
+
+   86 table_field: STRING .
+   88            | STRING . DOT STRING
+   89            | STRING . DOT NAME
+
+    DOT  shift, and go to state 122
+
+    $default  reduce using rule 86 (table_field)
+
+
+State 162
+
+  178 set_cond: table_field . EQUAL math_exp
+  179         | table_field . EQUAL DEFAULT
+
+    EQUAL  shift, and go to state 201
+
+
+State 163
+
+   12 update_cmd: UPDATE delete_option_list table_references SET set_cond . where_cond order_cond limit_cond end_cond
+  180 set_cond: set_cond . COMMA field EQUAL math_exp
+  181         | set_cond . COMMA field EQUAL DEFAULT
+
+    WHERE  shift, and go to state 196
+    COMMA  shift, and go to state 202
+
+    $default  reduce using rule 35 (where_cond)
+
+    where_cond  go to state 203
+
+
+State 164
+
+  101 table_references: table_references COMMA table_reference .
+  104 join_table: table_reference . join_ops table_factor join_cond
+
+    JOIN_TYPE      shift, and go to state 112
+    JOIN           shift, and go to state 113
+    STRAIGHT_JOIN  shift, and go to state 114
+
+    $default  reduce using rule 101 (table_references)
+
+    join_ops    go to state 115
+    join_types  go to state 116
+
+
+State 165
+
+  104 join_table: table_reference join_ops table_factor . join_cond
+
+    ON     shift, and go to state 204
+    USING  shift, and go to state 205
+
+    $default  reduce using rule 110 (join_cond)
+
+    join_cond  go to state 206
+
+
+State 166
+
+  108 join_types: join_types JOIN_TYPE .
+
+    $default  reduce using rule 108 (join_types)
+
+
+State 167
+
+  105 join_ops: join_types JOIN .
+
+    $default  reduce using rule 105 (join_ops)
+
+
+State 168
+
+  114 table_factor: simple_table DOT simple_table . alias index_hint
+
+    AS         shift, and go to state 86
+    STRING     shift, and go to state 93
+    Q_STRING   shift, and go to state 94
+    DQ_STRING  shift, and go to state 95
+    NAME       shift, and go to state 96
+
+    $default  reduce using rule 118 (alias)
+
+    alias      go to state 207
+    alias_str  go to state 100
+
+
+State 169
+
+  128 index_use: USE .
+
+    $default  reduce using rule 128 (index_use)
+
+
+State 170
+
+  129 index_use: IGNORE .
+
+    $default  reduce using rule 129 (index_use)
+
+
+State 171
+
+  130 index_use: FORCE .
+
+    $default  reduce using rule 130 (index_use)
+
+
+State 172
+
+  113 table_factor: simple_table alias index_hint .
+
+    $default  reduce using rule 113 (table_factor)
+
+
+State 173
+
+  126 index_hint: index_use . INDEX O_BRACE index_list C_BRACE
+  127           | index_use . INDEX FOR JOIN O_BRACE index_list C_BRACE
+
+    INDEX  shift, and go to state 208
+
+
+State 174
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM table_references . where_cond order_cond limit_cond end_cond
+  101 table_references: table_references . COMMA table_reference
+
+    WHERE  shift, and go to state 196
+    COMMA  shift, and go to state 111
+
+    $default  reduce using rule 35 (where_cond)
+
+    where_cond  go to state 209
+
+
+State 175
+
+   30 delete_table_list: delete_table_list COMMA delete_table .
+
+    $default  reduce using rule 30 (delete_table_list)
+
+
+State 176
+
+   34 delete_table: simple_table DOT MULTIPLY .
+
+    $default  reduce using rule 34 (delete_table)
+
+
+State 177
+
+   32 delete_table: simple_table DOT simple_table .
+   33             | simple_table DOT simple_table . DOT MULTIPLY
+
+    DOT  shift, and go to state 210
+
+    $default  reduce using rule 32 (delete_table)
+
+
+State 178
+
+   88 table_field: STRING DOT STRING .
+
+    $default  reduce using rule 88 (table_field)
+
+
+State 179
+
+   89 table_field: STRING DOT NAME .
+
+    $default  reduce using rule 89 (table_field)
+
+
+State 180
+
+   90 table_field: NAME DOT STRING .
+
+    $default  reduce using rule 90 (table_field)
+
+
+State 181
+
+   91 table_field: NAME DOT NAME .
+
+    $default  reduce using rule 91 (table_field)
+
+
+State 182
+
+  188 case_case: WHEN math_op THEN . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 211
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 183
+
+  185 case_fn: CASE math_exp case_cases ELSE . math_exp END_CASE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 212
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 184
+
+  184 case_fn: CASE math_exp case_cases END_CASE .
+
+    $default  reduce using rule 184 (case_fn)
+
+
+State 185
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  183 case_fn: CASE case_cases ELSE math_exp . END_CASE
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    END_CASE  shift, and go to state 213
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+
+State 186
+
+  189 cast_fn: CAST O_BRACE math_exp AS . DATA_TYPE C_BRACE
+  190        | CAST O_BRACE math_exp AS . DATA_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  191        | CAST O_BRACE math_exp AS . CHAR_TYPE C_BRACE
+  192        | CAST O_BRACE math_exp AS . CHAR_TYPE O_BRACE fn_args C_BRACE C_BRACE
+  193        | CAST O_BRACE math_exp AS . BINARY C_BRACE
+  194        | CAST O_BRACE math_exp AS . BINARY O_BRACE fn_args C_BRACE C_BRACE
+
+    DATA_TYPE  shift, and go to state 214
+    BINARY     shift, and go to state 215
+    CHAR_TYPE  shift, and go to state 216
+
+
+State 187
+
+  135 fn: CHAR_TYPE O_BRACE fn_args C_BRACE .
+
+    $default  reduce using rule 135 (fn)
+
+
+State 188
+
+  140 fn_args: fn_args COMMA . fn_args
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 217
+
+
+State 189
+
+  134 fn: STRING O_BRACE DISTINCT fn_args . order_cond C_BRACE
+  140 fn_args: fn_args . COMMA fn_args
+
+    ORDER  shift, and go to state 218
+    COMMA  shift, and go to state 188
+
+    $default  reduce using rule 162 (order_cond)
+
+    order_cond  go to state 219
+
+
+State 190
+
+  136 simple_fn: STRING O_BRACE MULTIPLY C_BRACE .
+
+    $default  reduce using rule 136 (simple_fn)
+
+
+State 191
+
+  133 fn: STRING O_BRACE fn_args C_BRACE .
+
+    $default  reduce using rule 133 (fn)
+
+
+State 192
+
+   43 select_exp: STRING DOT STRING DOT . MULTIPLY
+
+    MULTIPLY  shift, and go to state 220
+
+
+State 193
+
+   44 select_exp: STRING DOT NAME DOT . MULTIPLY
+
+    MULTIPLY  shift, and go to state 221
+
+
+State 194
+
+   45 select_exp: NAME DOT STRING DOT . MULTIPLY
+
+    MULTIPLY  shift, and go to state 222
+
+
+State 195
+
+   46 select_exp: NAME DOT NAME DOT . MULTIPLY
+
+    MULTIPLY  shift, and go to state 223
+
+
+State 196
+
+   36 where_cond: WHERE . logical_exp_list
+
+    EXISTS     shift, and go to state 224
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 225
+    NOT        shift, and go to state 226
+
+    logical_exp       go to state 227
+    math_exp          go to state 228
+    field             go to state 46
+    table_field       go to state 47
+    const_value       go to state 48
+    fn                go to state 49
+    simple_fn         go to state 50
+    logical_exp_list  go to state 229
+    case_fn           go to state 230
+    cast_fn           go to state 231
+
+
+State 197
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond . group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond
+
+    GROUP  shift, and go to state 232
+
+    $default  reduce using rule 153 (group_cond)
+
+    group_cond  go to state 233
+
+
+State 198
+
+   53 math_op: math_op IN O_BRACE fn_args . C_BRACE
+  140 fn_args: fn_args . COMMA fn_args
+
+    C_BRACE  shift, and go to state 234
+    COMMA    shift, and go to state 188
+
+
+State 199
+
+   52 math_op: math_op BETWEEN math_exp AND . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 235
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 200
+
+   49 math_op: math_op NOT comp_operator math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 49 (math_op)
+
+
+State 201
+
+  178 set_cond: table_field EQUAL . math_exp
+  179         | table_field EQUAL . DEFAULT
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    DEFAULT    shift, and go to state 236
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 237
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 202
+
+  180 set_cond: set_cond COMMA . field EQUAL math_exp
+  181         | set_cond COMMA . field EQUAL DEFAULT
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+
+    field        go to state 238
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 203
+
+   12 update_cmd: UPDATE delete_option_list table_references SET set_cond where_cond . order_cond limit_cond end_cond
+
+    ORDER  shift, and go to state 218
+
+    $default  reduce using rule 162 (order_cond)
+
+    order_cond  go to state 239
+
+
+State 204
+
+  111 join_cond: ON . logical_exp_list
+
+    EXISTS     shift, and go to state 224
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 225
+    NOT        shift, and go to state 226
+
+    logical_exp       go to state 227
+    math_exp          go to state 228
+    field             go to state 46
+    table_field       go to state 47
+    const_value       go to state 48
+    fn                go to state 49
+    simple_fn         go to state 50
+    logical_exp_list  go to state 240
+    case_fn           go to state 230
+    cast_fn           go to state 231
+
+
+State 205
+
+  112 join_cond: USING . O_BRACE math_exp C_BRACE
+
+    O_BRACE  shift, and go to state 241
+
+
+State 206
+
+  104 join_table: table_reference join_ops table_factor join_cond .
+
+    $default  reduce using rule 104 (join_table)
+
+
+State 207
+
+  114 table_factor: simple_table DOT simple_table alias . index_hint
+
+    USE     shift, and go to state 169
+    IGNORE  shift, and go to state 170
+    FORCE   shift, and go to state 171
+
+    $default  reduce using rule 125 (index_hint)
+
+    index_hint  go to state 242
+    index_use   go to state 173
+
+
+State 208
+
+  126 index_hint: index_use INDEX . O_BRACE index_list C_BRACE
+  127           | index_use INDEX . FOR JOIN O_BRACE index_list C_BRACE
+
+    FOR      shift, and go to state 243
+    O_BRACE  shift, and go to state 244
+
+
+State 209
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM table_references where_cond . order_cond limit_cond end_cond
+
+    ORDER  shift, and go to state 218
+
+    $default  reduce using rule 162 (order_cond)
+
+    order_cond  go to state 245
+
+
+State 210
+
+   33 delete_table: simple_table DOT simple_table DOT . MULTIPLY
+
+    MULTIPLY  shift, and go to state 246
+
+
+State 211
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  188 case_case: WHEN math_op THEN math_exp .
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 188 (case_case)
+
+
+State 212
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  185 case_fn: CASE math_exp case_cases ELSE math_exp . END_CASE
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    END_CASE  shift, and go to state 247
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+
+State 213
+
+  183 case_fn: CASE case_cases ELSE math_exp END_CASE .
+
+    $default  reduce using rule 183 (case_fn)
+
+
+State 214
+
+  189 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE . C_BRACE
+  190        | CAST O_BRACE math_exp AS DATA_TYPE . O_BRACE fn_args C_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 248
+    C_BRACE  shift, and go to state 249
+
+
+State 215
+
+  193 cast_fn: CAST O_BRACE math_exp AS BINARY . C_BRACE
+  194        | CAST O_BRACE math_exp AS BINARY . O_BRACE fn_args C_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 250
+    C_BRACE  shift, and go to state 251
+
+
+State 216
+
+  191 cast_fn: CAST O_BRACE math_exp AS CHAR_TYPE . C_BRACE
+  192        | CAST O_BRACE math_exp AS CHAR_TYPE . O_BRACE fn_args C_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 252
+    C_BRACE  shift, and go to state 253
+
+
+State 217
+
+  140 fn_args: fn_args . COMMA fn_args
+  140        | fn_args COMMA fn_args .
+
+    $default  reduce using rule 140 (fn_args)
+
+
+State 218
+
+  163 order_cond: ORDER . BY orderby_column_list sort_order
+
+    BY  shift, and go to state 254
+
+
+State 219
+
+  134 fn: STRING O_BRACE DISTINCT fn_args order_cond . C_BRACE
+
+    C_BRACE  shift, and go to state 255
+
+
+State 220
+
+   43 select_exp: STRING DOT STRING DOT MULTIPLY .
+
+    $default  reduce using rule 43 (select_exp)
+
+
+State 221
+
+   44 select_exp: STRING DOT NAME DOT MULTIPLY .
+
+    $default  reduce using rule 44 (select_exp)
+
+
+State 222
+
+   45 select_exp: NAME DOT STRING DOT MULTIPLY .
+
+    $default  reduce using rule 45 (select_exp)
+
+
+State 223
+
+   46 select_exp: NAME DOT NAME DOT MULTIPLY .
+
+    $default  reduce using rule 46 (select_exp)
+
+
+State 224
+
+   68 logical_exp: EXISTS . O_BRACE select_cmd C_BRACE
+
+    O_BRACE  shift, and go to state 256
+
+
+State 225
+
+   67 logical_exp: O_BRACE . logical_exp C_BRACE
+   80 math_exp: O_BRACE . math_exp C_BRACE
+   81         | O_BRACE . select_cmd C_BRACE
+
+    SELECT     shift, and go to state 1
+    EXISTS     shift, and go to state 224
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 225
+
+    select_cmd   go to state 82
+    logical_exp  go to state 257
+    math_exp     go to state 258
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_fn      go to state 230
+    cast_fn      go to state 231
+
+
+State 226
+
+  145 logical_exp_list: NOT . logical_exp
+
+    EXISTS     shift, and go to state 224
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 225
+
+    logical_exp  go to state 259
+    math_exp     go to state 228
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_fn      go to state 230
+    cast_fn      go to state 231
+
+
+State 227
+
+  146 logical_exp_list: logical_exp .
+
+    $default  reduce using rule 146 (logical_exp_list)
+
+
+State 228
+
+   54 logical_exp: math_exp .
+   55            | math_exp . comp_operator math_exp
+   56            | math_exp . NOT comp_operator math_exp
+   57            | math_exp . NOT math_exp
+   58            | math_exp . comp_operator math_exp comp_operator math_exp
+   59            | math_exp . NOT comp_operator math_exp comp_operator math_exp
+   60            | math_exp . comp_operator math_exp NOT comp_operator math_exp
+   61            | math_exp . NOT comp_operator math_exp NOT comp_operator math_exp
+   62            | math_exp . IN O_BRACE fn_args C_BRACE
+   63            | math_exp . NOT IN O_BRACE fn_args C_BRACE
+   64            | math_exp . IN O_BRACE select_cmd C_BRACE
+   65            | math_exp . NOT IN O_BRACE select_cmd C_BRACE
+   66            | math_exp . BETWEEN math_exp AND math_exp
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    IN        shift, and go to state 260
+    IS        shift, and go to state 88
+    EQUAL     shift, and go to state 89
+    N_EQUAL   shift, and go to state 90
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BETWEEN   shift, and go to state 261
+    REGEXP    shift, and go to state 92
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+    NOT       shift, and go to state 262
+    LIKE      shift, and go to state 98
+
+    $default  reduce using rule 54 (logical_exp)
+
+    comp_operator  go to state 263
+
+
+State 229
+
+   36 where_cond: WHERE logical_exp_list .
+  144 logical_exp_list: logical_exp_list . logical_operator logical_exp
+
+    AND  shift, and go to state 264
+    OR   shift, and go to state 265
+    XOR  shift, and go to state 266
+
+    $default  reduce using rule 36 (where_cond)
+
+    logical_operator  go to state 267
+
+
+State 230
+
+   69 logical_exp: case_fn .
+
+    $default  reduce using rule 69 (logical_exp)
+
+
+State 231
+
+   70 logical_exp: cast_fn .
+
+    $default  reduce using rule 70 (logical_exp)
+
+
+State 232
+
+  154 group_cond: GROUP . BY groupby_column_list sort_order
+
+    BY  shift, and go to state 268
+
+
+State 233
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond . having_cond order_cond limit_cond procedure_cond union_cond end_cond
+
+    HAVING  shift, and go to state 269
+
+    $default  reduce using rule 160 (having_cond)
+
+    having_cond  go to state 270
+
+
+State 234
+
+   53 math_op: math_op IN O_BRACE fn_args C_BRACE .
+
+    $default  reduce using rule 53 (math_op)
+
+
+State 235
+
+   52 math_op: math_op BETWEEN math_exp AND math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 52 (math_op)
+
+
+State 236
+
+  179 set_cond: table_field EQUAL DEFAULT .
+
+    $default  reduce using rule 179 (set_cond)
+
+
+State 237
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  178 set_cond: table_field EQUAL math_exp .
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 178 (set_cond)
+
+
+State 238
+
+  180 set_cond: set_cond COMMA field . EQUAL math_exp
+  181         | set_cond COMMA field . EQUAL DEFAULT
+
+    EQUAL  shift, and go to state 271
+
+
+State 239
+
+   12 update_cmd: UPDATE delete_option_list table_references SET set_cond where_cond order_cond . limit_cond end_cond
+
+    LIMIT  shift, and go to state 272
+
+    $default  reduce using rule 168 (limit_cond)
+
+    limit_cond  go to state 273
+
+
+State 240
+
+  111 join_cond: ON logical_exp_list .
+  144 logical_exp_list: logical_exp_list . logical_operator logical_exp
+
+    AND  shift, and go to state 264
+    OR   shift, and go to state 265
+    XOR  shift, and go to state 266
+
+    $default  reduce using rule 111 (join_cond)
+
+    logical_operator  go to state 267
+
+
+State 241
+
+  112 join_cond: USING O_BRACE . math_exp C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 274
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 242
+
+  114 table_factor: simple_table DOT simple_table alias index_hint .
+
+    $default  reduce using rule 114 (table_factor)
+
+
+State 243
+
+  127 index_hint: index_use INDEX FOR . JOIN O_BRACE index_list C_BRACE
+
+    JOIN  shift, and go to state 275
+
+
+State 244
+
+  126 index_hint: index_use INDEX O_BRACE . index_list C_BRACE
+
+    STRING  shift, and go to state 276
+
+    index_list  go to state 277
+
+
+State 245
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM table_references where_cond order_cond . limit_cond end_cond
+
+    LIMIT  shift, and go to state 272
+
+    $default  reduce using rule 168 (limit_cond)
+
+    limit_cond  go to state 278
+
+
+State 246
+
+   33 delete_table: simple_table DOT simple_table DOT MULTIPLY .
+
+    $default  reduce using rule 33 (delete_table)
+
+
+State 247
+
+  185 case_fn: CASE math_exp case_cases ELSE math_exp END_CASE .
+
+    $default  reduce using rule 185 (case_fn)
+
+
+State 248
+
+  190 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE O_BRACE . fn_args C_BRACE C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 279
+
+
+State 249
+
+  189 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE C_BRACE .
+
+    $default  reduce using rule 189 (cast_fn)
+
+
+State 250
+
+  194 cast_fn: CAST O_BRACE math_exp AS BINARY O_BRACE . fn_args C_BRACE C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 280
+
+
+State 251
+
+  193 cast_fn: CAST O_BRACE math_exp AS BINARY C_BRACE .
+
+    $default  reduce using rule 193 (cast_fn)
+
+
+State 252
+
+  192 cast_fn: CAST O_BRACE math_exp AS CHAR_TYPE O_BRACE . fn_args C_BRACE C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 281
+
+
+State 253
+
+  191 cast_fn: CAST O_BRACE math_exp AS CHAR_TYPE C_BRACE .
+
+    $default  reduce using rule 191 (cast_fn)
+
+
+State 254
+
+  163 order_cond: ORDER BY . orderby_column_list sort_order
+
+    NULLX      shift, and go to state 282
+    CHAR_TYPE  shift, and go to state 283
+    STRING     shift, and go to state 284
+    NAME       shift, and go to state 70
+
+    table_field          go to state 285
+    simple_fn            go to state 286
+    orderby_column_list  go to state 287
+
+
+State 255
+
+  134 fn: STRING O_BRACE DISTINCT fn_args order_cond C_BRACE .
+
+    $default  reduce using rule 134 (fn)
+
+
+State 256
+
+   68 logical_exp: EXISTS O_BRACE . select_cmd C_BRACE
+
+    SELECT  shift, and go to state 1
+
+    select_cmd  go to state 288
+
+
+State 257
+
+   67 logical_exp: O_BRACE logical_exp . C_BRACE
+
+    C_BRACE  shift, and go to state 289
+
+
+State 258
+
+   54 logical_exp: math_exp .
+   55            | math_exp . comp_operator math_exp
+   56            | math_exp . NOT comp_operator math_exp
+   57            | math_exp . NOT math_exp
+   58            | math_exp . comp_operator math_exp comp_operator math_exp
+   59            | math_exp . NOT comp_operator math_exp comp_operator math_exp
+   60            | math_exp . comp_operator math_exp NOT comp_operator math_exp
+   61            | math_exp . NOT comp_operator math_exp NOT comp_operator math_exp
+   62            | math_exp . IN O_BRACE fn_args C_BRACE
+   63            | math_exp . NOT IN O_BRACE fn_args C_BRACE
+   64            | math_exp . IN O_BRACE select_cmd C_BRACE
+   65            | math_exp . NOT IN O_BRACE select_cmd C_BRACE
+   66            | math_exp . BETWEEN math_exp AND math_exp
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+   80         | O_BRACE math_exp . C_BRACE
+
+    IN        shift, and go to state 260
+    IS        shift, and go to state 88
+    EQUAL     shift, and go to state 89
+    N_EQUAL   shift, and go to state 90
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BETWEEN   shift, and go to state 261
+    REGEXP    shift, and go to state 92
+    C_BRACE   shift, and go to state 144
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+    NOT       shift, and go to state 262
+    LIKE      shift, and go to state 98
+
+    C_BRACE  [reduce using rule 54 (logical_exp)]
+
+    comp_operator  go to state 263
+
+
+State 259
+
+  145 logical_exp_list: NOT logical_exp .
+
+    $default  reduce using rule 145 (logical_exp_list)
+
+
+State 260
+
+   62 logical_exp: math_exp IN . O_BRACE fn_args C_BRACE
+   64            | math_exp IN . O_BRACE select_cmd C_BRACE
+
+    O_BRACE  shift, and go to state 290
+
+
+State 261
+
+   66 logical_exp: math_exp BETWEEN . math_exp AND math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 291
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 262
+
+   56 logical_exp: math_exp NOT . comp_operator math_exp
+   57            | math_exp NOT . math_exp
+   59            | math_exp NOT . comp_operator math_exp comp_operator math_exp
+   61            | math_exp NOT . comp_operator math_exp NOT comp_operator math_exp
+   63            | math_exp NOT . IN O_BRACE fn_args C_BRACE
+   65            | math_exp NOT . IN O_BRACE select_cmd C_BRACE
+
+    IN         shift, and go to state 292
+    IS         shift, and go to state 88
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    EQUAL      shift, and go to state 89
+    N_EQUAL    shift, and go to state 90
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    REGEXP     shift, and go to state 92
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+    LIKE       shift, and go to state 98
+
+    math_exp       go to state 293
+    field          go to state 46
+    table_field    go to state 47
+    const_value    go to state 48
+    fn             go to state 49
+    simple_fn      go to state 50
+    comp_operator  go to state 294
+
+
+State 263
+
+   55 logical_exp: math_exp comp_operator . math_exp
+   58            | math_exp comp_operator . math_exp comp_operator math_exp
+   60            | math_exp comp_operator . math_exp NOT comp_operator math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 295
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 264
+
+  141 logical_operator: AND .
+
+    $default  reduce using rule 141 (logical_operator)
+
+
+State 265
+
+  142 logical_operator: OR .
+
+    $default  reduce using rule 142 (logical_operator)
+
+
+State 266
+
+  143 logical_operator: XOR .
+
+    $default  reduce using rule 143 (logical_operator)
+
+
+State 267
+
+  144 logical_exp_list: logical_exp_list logical_operator . logical_exp
+
+    EXISTS     shift, and go to state 224
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 225
+
+    logical_exp  go to state 296
+    math_exp     go to state 228
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    case_fn      go to state 230
+    cast_fn      go to state 231
+
+
+State 268
+
+  154 group_cond: GROUP BY . groupby_column_list sort_order
+
+    STRING  shift, and go to state 161
+    NAME    shift, and go to state 70
+
+    table_field          go to state 297
+    groupby_column_list  go to state 298
+
+
+State 269
+
+  161 having_cond: HAVING . logical_exp_list
+
+    EXISTS     shift, and go to state 224
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CASE       shift, and go to state 31
+    CAST       shift, and go to state 32
+    BINARY     shift, and go to state 33
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 225
+    NOT        shift, and go to state 226
+
+    logical_exp       go to state 227
+    math_exp          go to state 228
+    field             go to state 46
+    table_field       go to state 47
+    const_value       go to state 48
+    fn                go to state 49
+    simple_fn         go to state 50
+    logical_exp_list  go to state 299
+    case_fn           go to state 230
+    cast_fn           go to state 231
+
+
+State 270
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond . order_cond limit_cond procedure_cond union_cond end_cond
+
+    ORDER  shift, and go to state 218
+
+    $default  reduce using rule 162 (order_cond)
+
+    order_cond  go to state 300
+
+
+State 271
+
+  180 set_cond: set_cond COMMA field EQUAL . math_exp
+  181         | set_cond COMMA field EQUAL . DEFAULT
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    DEFAULT    shift, and go to state 301
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 302
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 272
+
+  169 limit_cond: LIMIT . INTEGER
+  170           | LIMIT . INTEGER COMMA INTEGER
+  171           | LIMIT . INTEGER OFFSET INTEGER
+
+    INTEGER  shift, and go to state 303
+
+
+State 273
+
+   12 update_cmd: UPDATE delete_option_list table_references SET set_cond where_cond order_cond limit_cond . end_cond
+
+    END  shift, and go to state 304
+
+    $default  reduce using rule 176 (end_cond)
+
+    end_cond  go to state 305
+
+
+State 274
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  112 join_cond: USING O_BRACE math_exp . C_BRACE
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    C_BRACE   shift, and go to state 306
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+
+State 275
+
+  127 index_hint: index_use INDEX FOR JOIN . O_BRACE index_list C_BRACE
+
+    O_BRACE  shift, and go to state 307
+
+
+State 276
+
+  131 index_list: STRING .
+
+    $default  reduce using rule 131 (index_list)
+
+
+State 277
+
+  126 index_hint: index_use INDEX O_BRACE index_list . C_BRACE
+  132 index_list: index_list . COMMA index_list
+
+    C_BRACE  shift, and go to state 308
+    COMMA    shift, and go to state 309
+
+
+State 278
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM table_references where_cond order_cond limit_cond . end_cond
+
+    END  shift, and go to state 304
+
+    $default  reduce using rule 176 (end_cond)
+
+    end_cond  go to state 310
+
+
+State 279
+
+  140 fn_args: fn_args . COMMA fn_args
+  190 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE O_BRACE fn_args . C_BRACE C_BRACE
+
+    C_BRACE  shift, and go to state 311
+    COMMA    shift, and go to state 188
+
+
+State 280
+
+  140 fn_args: fn_args . COMMA fn_args
+  194 cast_fn: CAST O_BRACE math_exp AS BINARY O_BRACE fn_args . C_BRACE C_BRACE
+
+    C_BRACE  shift, and go to state 312
+    COMMA    shift, and go to state 188
+
+
+State 281
+
+  140 fn_args: fn_args . COMMA fn_args
+  192 cast_fn: CAST O_BRACE math_exp AS CHAR_TYPE O_BRACE fn_args . C_BRACE C_BRACE
+
+    C_BRACE  shift, and go to state 313
+    COMMA    shift, and go to state 188
+
+
+State 282
+
+  166 orderby_column_list: NULLX .
+
+    $default  reduce using rule 166 (orderby_column_list)
+
+
+State 283
+
+  138 simple_fn: CHAR_TYPE . O_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 314
+
+
+State 284
+
+   86 table_field: STRING .
+   88            | STRING . DOT STRING
+   89            | STRING . DOT NAME
+  136 simple_fn: STRING . O_BRACE MULTIPLY C_BRACE
+  137          | STRING . O_BRACE C_BRACE
+
+    O_BRACE  shift, and go to state 315
+    DOT      shift, and go to state 122
+
+    $default  reduce using rule 86 (table_field)
+
+
+State 285
+
+  164 orderby_column_list: table_field .
+
+    $default  reduce using rule 164 (orderby_column_list)
+
+
+State 286
+
+  165 orderby_column_list: simple_fn .
+
+    $default  reduce using rule 165 (orderby_column_list)
+
+
+State 287
+
+  163 order_cond: ORDER BY orderby_column_list . sort_order
+  167 orderby_column_list: orderby_column_list . COMMA orderby_column_list
+
+    ASC    shift, and go to state 316
+    DESC   shift, and go to state 317
+    COMMA  shift, and go to state 318
+
+    $default  reduce using rule 157 (sort_order)
+
+    sort_order  go to state 319
+
+
+State 288
+
+   68 logical_exp: EXISTS O_BRACE select_cmd . C_BRACE
+
+    C_BRACE  shift, and go to state 320
+
+
+State 289
+
+   67 logical_exp: O_BRACE logical_exp C_BRACE .
+
+    $default  reduce using rule 67 (logical_exp)
+
+
+State 290
+
+   62 logical_exp: math_exp IN O_BRACE . fn_args C_BRACE
+   64            | math_exp IN O_BRACE . select_cmd C_BRACE
+
+    SELECT     shift, and go to state 1
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    select_cmd   go to state 321
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 322
+
+
+State 291
+
+   66 logical_exp: math_exp BETWEEN math_exp . AND math_exp
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+    AND       shift, and go to state 323
+
+
+State 292
+
+   63 logical_exp: math_exp NOT IN . O_BRACE fn_args C_BRACE
+   65            | math_exp NOT IN . O_BRACE select_cmd C_BRACE
+
+    O_BRACE  shift, and go to state 324
+
+
+State 293
+
+   57 logical_exp: math_exp NOT math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 57 (logical_exp)
+
+
+State 294
+
+   56 logical_exp: math_exp NOT comp_operator . math_exp
+   59            | math_exp NOT comp_operator . math_exp comp_operator math_exp
+   61            | math_exp NOT comp_operator . math_exp NOT comp_operator math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 325
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 295
+
+   55 logical_exp: math_exp comp_operator math_exp .
+   58            | math_exp comp_operator math_exp . comp_operator math_exp
+   60            | math_exp comp_operator math_exp . NOT comp_operator math_exp
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    IS        shift, and go to state 88
+    EQUAL     shift, and go to state 89
+    N_EQUAL   shift, and go to state 90
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    REGEXP    shift, and go to state 92
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+    NOT       shift, and go to state 326
+    LIKE      shift, and go to state 98
+
+    $default  reduce using rule 55 (logical_exp)
+
+    comp_operator  go to state 327
+
+
+State 296
+
+  144 logical_exp_list: logical_exp_list logical_operator logical_exp .
+
+    $default  reduce using rule 144 (logical_exp_list)
+
+
+State 297
+
+  155 groupby_column_list: table_field .
+
+    $default  reduce using rule 155 (groupby_column_list)
+
+
+State 298
+
+  154 group_cond: GROUP BY groupby_column_list . sort_order
+  156 groupby_column_list: groupby_column_list . COMMA table_field
+
+    ASC    shift, and go to state 316
+    DESC   shift, and go to state 317
+    COMMA  shift, and go to state 328
+
+    $default  reduce using rule 157 (sort_order)
+
+    sort_order  go to state 329
+
+
+State 299
+
+  144 logical_exp_list: logical_exp_list . logical_operator logical_exp
+  161 having_cond: HAVING logical_exp_list .
+
+    AND  shift, and go to state 264
+    OR   shift, and go to state 265
+    XOR  shift, and go to state 266
+
+    $default  reduce using rule 161 (having_cond)
+
+    logical_operator  go to state 267
+
+
+State 300
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond order_cond . limit_cond procedure_cond union_cond end_cond
+
+    LIMIT  shift, and go to state 272
+
+    $default  reduce using rule 168 (limit_cond)
+
+    limit_cond  go to state 330
+
+
+State 301
+
+  181 set_cond: set_cond COMMA field EQUAL DEFAULT .
+
+    $default  reduce using rule 181 (set_cond)
+
+
+State 302
+
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+  180 set_cond: set_cond COMMA field EQUAL math_exp .
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 180 (set_cond)
+
+
+State 303
+
+  169 limit_cond: LIMIT INTEGER .
+  170           | LIMIT INTEGER . COMMA INTEGER
+  171           | LIMIT INTEGER . OFFSET INTEGER
+
+    OFFSET  shift, and go to state 331
+    COMMA   shift, and go to state 332
+
+    $default  reduce using rule 169 (limit_cond)
+
+
+State 304
+
+  177 end_cond: END .
+
+    $default  reduce using rule 177 (end_cond)
+
+
+State 305
+
+   12 update_cmd: UPDATE delete_option_list table_references SET set_cond where_cond order_cond limit_cond end_cond .
+
+    $default  reduce using rule 12 (update_cmd)
+
+
+State 306
+
+  112 join_cond: USING O_BRACE math_exp C_BRACE .
+
+    $default  reduce using rule 112 (join_cond)
+
+
+State 307
+
+  127 index_hint: index_use INDEX FOR JOIN O_BRACE . index_list C_BRACE
+
+    STRING  shift, and go to state 276
+
+    index_list  go to state 333
+
+
+State 308
+
+  126 index_hint: index_use INDEX O_BRACE index_list C_BRACE .
+
+    $default  reduce using rule 126 (index_hint)
+
+
+State 309
+
+  132 index_list: index_list COMMA . index_list
+
+    STRING  shift, and go to state 276
+
+    index_list  go to state 334
+
+
+State 310
+
+   11 delete_cmd: DELETE delete_option_list delete_table_list FROM table_references where_cond order_cond limit_cond end_cond .
+
+    $default  reduce using rule 11 (delete_cmd)
+
+
+State 311
+
+  190 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE O_BRACE fn_args C_BRACE . C_BRACE
+
+    C_BRACE  shift, and go to state 335
+
+
+State 312
+
+  194 cast_fn: CAST O_BRACE math_exp AS BINARY O_BRACE fn_args C_BRACE . C_BRACE
+
+    C_BRACE  shift, and go to state 336
+
+
+State 313
+
+  192 cast_fn: CAST O_BRACE math_exp AS CHAR_TYPE O_BRACE fn_args C_BRACE . C_BRACE
+
+    C_BRACE  shift, and go to state 337
+
+
+State 314
+
+  138 simple_fn: CHAR_TYPE O_BRACE . C_BRACE
+
+    C_BRACE  shift, and go to state 130
+
+
+State 315
+
+  136 simple_fn: STRING O_BRACE . MULTIPLY C_BRACE
+  137          | STRING O_BRACE . C_BRACE
+
+    MULTIPLY  shift, and go to state 134
+    C_BRACE   shift, and go to state 135
+
+
+State 316
+
+  158 sort_order: ASC .
+
+    $default  reduce using rule 158 (sort_order)
+
+
+State 317
+
+  159 sort_order: DESC .
+
+    $default  reduce using rule 159 (sort_order)
+
+
+State 318
+
+  167 orderby_column_list: orderby_column_list COMMA . orderby_column_list
+
+    NULLX      shift, and go to state 282
+    CHAR_TYPE  shift, and go to state 283
+    STRING     shift, and go to state 284
+    NAME       shift, and go to state 70
+
+    table_field          go to state 285
+    simple_fn            go to state 286
+    orderby_column_list  go to state 338
+
+
+State 319
+
+  163 order_cond: ORDER BY orderby_column_list sort_order .
+
+    $default  reduce using rule 163 (order_cond)
+
+
+State 320
+
+   68 logical_exp: EXISTS O_BRACE select_cmd C_BRACE .
+
+    $default  reduce using rule 68 (logical_exp)
+
+
+State 321
+
+   64 logical_exp: math_exp IN O_BRACE select_cmd . C_BRACE
+
+    C_BRACE  shift, and go to state 339
+
+
+State 322
+
+   62 logical_exp: math_exp IN O_BRACE fn_args . C_BRACE
+  140 fn_args: fn_args . COMMA fn_args
+
+    C_BRACE  shift, and go to state 340
+    COMMA    shift, and go to state 188
+
+
+State 323
+
+   66 logical_exp: math_exp BETWEEN math_exp AND . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 341
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 324
+
+   63 logical_exp: math_exp NOT IN O_BRACE . fn_args C_BRACE
+   65            | math_exp NOT IN O_BRACE . select_cmd C_BRACE
+
+    SELECT     shift, and go to state 1
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    select_cmd   go to state 342
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 343
+
+
+State 325
+
+   56 logical_exp: math_exp NOT comp_operator math_exp .
+   59            | math_exp NOT comp_operator math_exp . comp_operator math_exp
+   61            | math_exp NOT comp_operator math_exp . NOT comp_operator math_exp
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    IS        shift, and go to state 88
+    EQUAL     shift, and go to state 89
+    N_EQUAL   shift, and go to state 90
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    REGEXP    shift, and go to state 92
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+    NOT       shift, and go to state 344
+    LIKE      shift, and go to state 98
+
+    $default  reduce using rule 56 (logical_exp)
+
+    comp_operator  go to state 345
+
+
+State 326
+
+   60 logical_exp: math_exp comp_operator math_exp NOT . comp_operator math_exp
+
+    IS       shift, and go to state 88
+    EQUAL    shift, and go to state 89
+    N_EQUAL  shift, and go to state 90
+    REGEXP   shift, and go to state 92
+    LIKE     shift, and go to state 98
+
+    comp_operator  go to state 346
+
+
+State 327
+
+   58 logical_exp: math_exp comp_operator math_exp comp_operator . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 347
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 328
+
+  156 groupby_column_list: groupby_column_list COMMA . table_field
+
+    STRING  shift, and go to state 161
+    NAME    shift, and go to state 70
+
+    table_field  go to state 348
+
+
+State 329
+
+  154 group_cond: GROUP BY groupby_column_list sort_order .
+
+    $default  reduce using rule 154 (group_cond)
+
+
+State 330
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond . procedure_cond union_cond end_cond
+
+    PROCEDURE  shift, and go to state 349
+
+    $default  reduce using rule 172 (procedure_cond)
+
+    procedure_cond  go to state 350
+
+
+State 331
+
+  171 limit_cond: LIMIT INTEGER OFFSET . INTEGER
+
+    INTEGER  shift, and go to state 351
+
+
+State 332
+
+  170 limit_cond: LIMIT INTEGER COMMA . INTEGER
+
+    INTEGER  shift, and go to state 352
+
+
+State 333
+
+  127 index_hint: index_use INDEX FOR JOIN O_BRACE index_list . C_BRACE
+  132 index_list: index_list . COMMA index_list
+
+    C_BRACE  shift, and go to state 353
+    COMMA    shift, and go to state 309
+
+
+State 334
+
+  132 index_list: index_list . COMMA index_list
+  132           | index_list COMMA index_list .
+
+    $default  reduce using rule 132 (index_list)
+
+
+State 335
+
+  190 cast_fn: CAST O_BRACE math_exp AS DATA_TYPE O_BRACE fn_args C_BRACE C_BRACE .
+
+    $default  reduce using rule 190 (cast_fn)
+
+
+State 336
+
+  194 cast_fn: CAST O_BRACE math_exp AS BINARY O_BRACE fn_args C_BRACE C_BRACE .
+
+    $default  reduce using rule 194 (cast_fn)
+
+
+State 337
+
+  192 cast_fn: CAST O_BRACE math_exp AS CHAR_TYPE O_BRACE fn_args C_BRACE C_BRACE .
+
+    $default  reduce using rule 192 (cast_fn)
+
+
+State 338
+
+  167 orderby_column_list: orderby_column_list . COMMA orderby_column_list
+  167                    | orderby_column_list COMMA orderby_column_list .
+
+    $default  reduce using rule 167 (orderby_column_list)
+
+
+State 339
+
+   64 logical_exp: math_exp IN O_BRACE select_cmd C_BRACE .
+
+    $default  reduce using rule 64 (logical_exp)
+
+
+State 340
+
+   62 logical_exp: math_exp IN O_BRACE fn_args C_BRACE .
+
+    $default  reduce using rule 62 (logical_exp)
+
+
+State 341
+
+   66 logical_exp: math_exp BETWEEN math_exp AND math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 66 (logical_exp)
+
+
+State 342
+
+   65 logical_exp: math_exp NOT IN O_BRACE select_cmd . C_BRACE
+
+    C_BRACE  shift, and go to state 354
+
+
+State 343
+
+   63 logical_exp: math_exp NOT IN O_BRACE fn_args . C_BRACE
+  140 fn_args: fn_args . COMMA fn_args
+
+    C_BRACE  shift, and go to state 355
+    COMMA    shift, and go to state 188
+
+
+State 344
+
+   61 logical_exp: math_exp NOT comp_operator math_exp NOT . comp_operator math_exp
+
+    IS       shift, and go to state 88
+    EQUAL    shift, and go to state 89
+    N_EQUAL  shift, and go to state 90
+    REGEXP   shift, and go to state 92
+    LIKE     shift, and go to state 98
+
+    comp_operator  go to state 356
+
+
+State 345
+
+   59 logical_exp: math_exp NOT comp_operator math_exp comp_operator . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 357
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 346
+
+   60 logical_exp: math_exp comp_operator math_exp NOT comp_operator . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 358
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 347
+
+   58 logical_exp: math_exp comp_operator math_exp comp_operator math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 58 (logical_exp)
+
+
+State 348
+
+  156 groupby_column_list: groupby_column_list COMMA table_field .
+
+    $default  reduce using rule 156 (groupby_column_list)
+
+
+State 349
+
+  173 procedure_cond: PROCEDURE . fn
+
+    CHAR_TYPE  shift, and go to state 359
+    STRING     shift, and go to state 360
+
+    fn  go to state 361
+
+
+State 350
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond . union_cond end_cond
+
+    UNION  shift, and go to state 362
+
+    $default  reduce using rule 174 (union_cond)
+
+    union_cond  go to state 363
+
+
+State 351
+
+  171 limit_cond: LIMIT INTEGER OFFSET INTEGER .
+
+    $default  reduce using rule 171 (limit_cond)
+
+
+State 352
+
+  170 limit_cond: LIMIT INTEGER COMMA INTEGER .
+
+    $default  reduce using rule 170 (limit_cond)
+
+
+State 353
+
+  127 index_hint: index_use INDEX FOR JOIN O_BRACE index_list C_BRACE .
+
+    $default  reduce using rule 127 (index_hint)
+
+
+State 354
+
+   65 logical_exp: math_exp NOT IN O_BRACE select_cmd C_BRACE .
+
+    $default  reduce using rule 65 (logical_exp)
+
+
+State 355
+
+   63 logical_exp: math_exp NOT IN O_BRACE fn_args C_BRACE .
+
+    $default  reduce using rule 63 (logical_exp)
+
+
+State 356
+
+   61 logical_exp: math_exp NOT comp_operator math_exp NOT comp_operator . math_exp
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 364
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+
+
+State 357
+
+   59 logical_exp: math_exp NOT comp_operator math_exp comp_operator math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 59 (logical_exp)
+
+
+State 358
+
+   60 logical_exp: math_exp comp_operator math_exp NOT comp_operator math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 60 (logical_exp)
+
+
+State 359
+
+  135 fn: CHAR_TYPE . O_BRACE fn_args C_BRACE
+
+    O_BRACE  shift, and go to state 365
+
+
+State 360
+
+  133 fn: STRING . O_BRACE fn_args C_BRACE
+  134   | STRING . O_BRACE DISTINCT fn_args order_cond C_BRACE
+
+    O_BRACE  shift, and go to state 366
+
+
+State 361
+
+  173 procedure_cond: PROCEDURE fn .
+
+    $default  reduce using rule 173 (procedure_cond)
+
+
+State 362
+
+  175 union_cond: UNION . select_cmd
+
+    SELECT  shift, and go to state 1
+
+    select_cmd  go to state 367
+
+
+State 363
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond . end_cond
+
+    END  shift, and go to state 304
+
+    END       [reduce using rule 176 (end_cond)]
+    $default  reduce using rule 176 (end_cond)
+
+    end_cond  go to state 368
+
+
+State 364
+
+   61 logical_exp: math_exp NOT comp_operator math_exp NOT comp_operator math_exp .
+   72 math_exp: math_exp . BASIC_OP field
+   73         | math_exp . MULTIPLY field
+   74         | math_exp . DIVIDE field
+   75         | math_exp . SHIFT field
+   76         | math_exp . BIT_OR field
+   77         | math_exp . BIT_AND field
+   79         | math_exp . POWER field
+
+    MULTIPLY  shift, and go to state 102
+    DIVIDE    shift, and go to state 103
+    POWER     shift, and go to state 104
+    SHIFT     shift, and go to state 105
+    BASIC_OP  shift, and go to state 106
+    BIT_OR    shift, and go to state 107
+    BIT_AND   shift, and go to state 108
+
+    $default  reduce using rule 61 (logical_exp)
+
+
+State 365
+
+  135 fn: CHAR_TYPE O_BRACE . fn_args C_BRACE
+
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 132
+
+
+State 366
+
+  133 fn: STRING O_BRACE . fn_args C_BRACE
+  134   | STRING O_BRACE . DISTINCT fn_args order_cond C_BRACE
+
+    DISTINCT   shift, and go to state 133
+    NULLX      shift, and go to state 25
+    UNKNOWN    shift, and go to state 26
+    FALSEX     shift, and go to state 27
+    TRUEX      shift, and go to state 28
+    BASIC_OP   shift, and go to state 30
+    CHAR_TYPE  shift, and go to state 34
+    INTEGER    shift, and go to state 35
+    STRING     shift, and go to state 69
+    Q_STRING   shift, and go to state 37
+    DQ_STRING  shift, and go to state 38
+    NAME       shift, and go to state 70
+    VARIABLE   shift, and go to state 40
+    O_BRACE    shift, and go to state 41
+
+    math_exp     go to state 131
+    field        go to state 46
+    table_field  go to state 47
+    const_value  go to state 48
+    fn           go to state 49
+    simple_fn    go to state 50
+    fn_args      go to state 136
+
+
+State 367
+
+  175 union_cond: UNION select_cmd .
+
+    $default  reduce using rule 175 (union_cond)
+
+
+State 368
+
+    7 select_cmd: SELECT select_options select_exps FROM table_references where_cond group_cond having_cond order_cond limit_cond procedure_cond union_cond end_cond .
+
+    $default  reduce using rule 7 (select_cmd)

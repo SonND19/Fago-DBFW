@@ -1,0 +1,34 @@
+/var/log/greensql.log {
+        daily
+        size 10M
+        missingok
+        rotate 5
+        compress
+        delaycompress
+	copytruncate
+        notifempty
+        #create 600 greensql greensql
+}
+/var/log/alert.log {
+        daily
+        size 10M
+        missingok
+        rotate 5
+        compress
+        delaycompress
+	copytruncate
+        notifempty
+        #create 600 greensql greensql
+}
+/var/log/event.log {
+        daily
+        size 10M
+        missingok
+        rotate 5
+        compress
+        delaycompress
+	copytruncate
+        notifempty
+        #create 600 greensql greensql
+}
+

@@ -1,0 +1,1111 @@
+[17/Jun/2023 12:16:19] User: son	Database: greendb	Query: SELECT *  from student;	Status: BLOCKED   
+[17/Jun/2023 12:16:20] User: son	Database: greendb	Query: SELECT *  from student;	Status: BLOCKED   
+[17/Jun/2023 12:16:51] User: green	Database: greendb	Query: select id from student;	Status: WARN    
+[17/Jun/2023 12:36:31] User: green	Database: greendb	Query: CREATE USER nam WITH PASSWORD 'SON123';	Status: BLOCKED   
+[17/Jun/2023 12:42:42] User: nam	Database: greendb	Query: SELECT * FROM student;	Status: BLOCKED   
+[17/Jun/2023 12:44:02] User: nam	Database: greendb	Query: SELECT * FROM student where 1 not in (0);	Status: BLOCKED      
+[17/Jun/2023 12:44:43] User: nam	Database: greendb	Query: SELECT id FROM student where 1 not in (0);	Status: BLOCKED   
+[17/Jun/2023 12:46:36] User: nam	Database: greendb	Query: delete from ad where 1=1;	Status: BLOCKED   
+[17/Jun/2023 12:47:09] User: son	Database: greendb	Query: SELECT id  from student where id =1 or 1=1;	Status: BLOCKED      
+[17/Jun/2023 12:51:51] User: son	Database: greendb	Query: select id from student where((1=1) and (1=2));	Status: BLOCKED   
+[17/Jun/2023 13:00:54] User: son	Database: greendb	Query: DELETE FROM student WHERE id = '2';	Status: BLOCKED   
+[17/Jun/2023 13:02:18] User: son	Database: greendb	Query: insert into student (id, name, address) values (1, 'john', '1 main st.');	Status: WARN    
+[17/Jun/2023 13:04:05] User: nam	Database: greendb	Query: grant select on student to nam;	Status: WARN    
+[17/Jun/2023 13:08:09] User: son	Database: greendb	Query: select * from student WHERE TRUE;	Status: BLOCKED   
+[17/Jun/2023 13:08:42] User: nam	Database: greendb	Query: SELECT * from student where name = ' ' or 1='1';	Status: BLOCKED   
+[17/Jun/2023 13:10:41] User: nam	Database: greendb	Query: select * from admin where id >'10' or -1=-1;	Status: BLOCKED   
+[17/Jun/2023 13:12:50] User: son	Database: greendb	Query: select id from student /*\nnam*//*comment\n*/;	Status: BLOCKED   
+[17/Jun/2023 13:13:57] User: son	Database: greendb	Query: select * from admin /*!12345*/;	Status: BLOCKED   
+[17/Jun/2023 13:14:45] User: nam	Database: greendb	Query: SELECT * FROM something WHERE age > '21' OR 1 = 1 UNION SELECT username, password FROM user ;	Status: BLOCKED   
+[17/Jun/2023 13:17:41] User: son	Database: greendb	Query: SELECT * FROM foo /*! /* /* nested! */*/*/;	Status: BLOCKED   
+[17/Jun/2023 13:18:18] User: son	Database: greendb	Query: SELECT * FROM student /* ! space => regular */;	Status: BLOCKED   
+[17/Jun/2023 13:24:51] User: green	Database: greendb	Query: select id from student where 1=1;	Status: BLOCKED   
+[17/Jun/2023 18:38:40] User: green	Database: greendb	Query: grant select on student to son;	Status: WARN    
+[17/Jun/2023 18:39:09] User: nam	Database: greendb	Query: select id from student;	Status: WARN    
+[17/Jun/2023 18:39:37] User: green	Database: greendb	Query: grant select on student to nam;	Status: WARN    
+[17/Jun/2023 18:39:41] User: nam	Database: greendb	Query: select id from student;	Status: WARN    
+[17/Jun/2023 18:40:01] User: nam	Database: greendb	Query: SELECT * from student;	Status: BLOCKED   
+[17/Jun/2023 18:40:48] User: nam	Database: greendb	Query: drop from ad;	Status: WARN    
+[17/Jun/2023 18:40:51] User: nam	Database: greendb	Query: drop from ad;	Status: WARN    
+[17/Jun/2023 19:22:44] User: nam	Database: greendb	Query: create user ad with password '123';	Status: BLOCKED   
+[17/Jun/2023 19:23:54] User: nam	Database: greendb	Query: drop from student;	Status: WARN    
+[18/Jun/2023 12:03:18] User: green	Database: greendb	Query: grant select on student to son;	Status: WARN    
+[18/Jun/2023 12:04:10] User: green	Database: greendb	Query: revoke select on student to son;	Status: WARN    
+[18/Jun/2023 12:04:26] User: green	Database: greendb	Query: revoke select on student from son;	Status: WARN    
+[18/Jun/2023 12:05:16] User: son	Database: greendb	Query: select id from student;	Status: WARN    
+[18/Jun/2023 12:05:45] User: green	Database: greendb	Query: select id, name from student;	Status: WARN    
+[18/Jun/2023 12:18:08] User: son	Database: greendb	Query: create user name with password 'SON123';	Status: BLOCKED   
+[18/Jun/2023 12:19:43] User: green	Database: greendb	Query: create user name with password 'SON123';	Status: BLOCKED   
+[18/Jun/2023 12:20:50] User: green	Database: greendb	Query: grant select on info to son;	Status: WARN    
+[18/Jun/2023 12:21:11] User: son	Database: greendb	Query: select id from info;	Status: WARN    
+[19/Jun/2023 12:34:22] User: green	Database: greendb	Query: revoke all privileges on info to son;	Status: WARN    
+[19/Jun/2023 12:34:38] User: green	Database: greendb	Query: revoke all privileges on info from son;	Status: WARN    
+[19/Jun/2023 12:35:13] User: green	Database: greendb	Query: revoke all privileges on info from nam;	Status: WARN    
+[19/Jun/2023 12:36:26] User: son	Database: greendb	Query: grant select on info to nam;	Status: WARN    
+[19/Jun/2023 12:36:44] User: nam	Database: greendb	Query: select id from info;	Status: WARN    
+[19/Jun/2023 12:41:08] User: nam	Database: greendb	Query: select id from info;	Status: WARN    
+[19/Jun/2023 12:41:09] User: nam	Database: greendb	Query: select id from info;	Status: WARN    
+[19/Jun/2023 12:43:00] User: nam	Database: greendb	Query: select id from info;	Status: WARN    
+[19/Jun/2023 12:47:13] User: nam	Database: greendb	Query: SELECT name from admin where pwd ='' OR 1=1;	Status: BLOCKED   
+[19/Jun/2023 14:26:36] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 14:28:19] User: son	Database: greendb	Query: grant select on info to nam;	Status: BLOCKED   
+[19/Jun/2023 14:29:04] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[19/Jun/2023 14:29:22] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 14:29:30] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 14:30:10] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[19/Jun/2023 14:32:17] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[19/Jun/2023 14:33:59] User: green	Database: greendb	Query: revoke select on info from son
+;	Status: BLOCKED   
+[19/Jun/2023 14:54:13] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[19/Jun/2023 14:54:42] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 14:55:47] User: green	Database: greendb	Query: select id from info
+;	Status: BLOCKED   
+[19/Jun/2023 14:56:35] User: green	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 14:56:38] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[19/Jun/2023 14:57:18] User: green	Database: greendb	Query: select name from info;	Status: BLOCKED   
+[19/Jun/2023 14:57:45] User: green	Database: greendb	Query: select name from info;	Status: BLOCKED   
+[19/Jun/2023 15:28:29] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 15:28:58] User: green	Database: greendb	Query: create user ad1 with password 'SON123';	Status: BLOCKED   
+[19/Jun/2023 15:30:19] User: nam	Database: greendb	Query: create user ad with password 'SON123';	Status: BLOCKED   
+[19/Jun/2023 15:34:11] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[19/Jun/2023 15:34:40] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[19/Jun/2023 15:35:23] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 15:36:11] User: nam	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 15:37:10] User: son	Database: greendb	Query: select id, name from info;	Status: BLOCKED   
+[19/Jun/2023 15:47:47] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[19/Jun/2023 17:42:08] User: son	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 17:42:34] User: son	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 17:42:46] User: son	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 17:46:29] User: son	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[19/Jun/2023 17:52:13] User: son	Database: greendb	Query: SELECT * from info;	Status: BLOCKED   
+[19/Jun/2023 18:01:52] User: son	Database: greendb	Query: SELECT * from info where id = 1 or 1=1;	Status: BLOCKED   
+[19/Jun/2023 18:34:20] User: son	Database: greendb	Query: SELECT * from info where id = 1 or 1=1;	Status: BLOCKED   
+[19/Jun/2023 18:35:35] User: son	Database: greendb	Query: SELECT * from info where id = 1 or 1=1;	Status: BLOCKED   
+[20/Jun/2023 11:11:55] User: son	Database: greendb	Query: SELECT name from admin where pwd ='' OR 1=1;	Status: BLOCKED   
+[20/Jun/2023 11:12:25] User: green	Database: greendb	Query: SELECT name from admin where pwd ='' OR 1=1;	Status: BLOCKED   
+[20/Jun/2023 11:12:46] User: green	Database: greendb	Query: select * from admin;	Status: BLOCKED   
+[20/Jun/2023 11:13:49] User: green	Database: greendb	Query: select * from admin;	Status: BLOCKED   
+[20/Jun/2023 11:15:59] User: green	Database: greendb	Query: select * from admin;	Status: BLOCKED   
+[20/Jun/2023 11:19:33] User: green	Database: greendb	Query: select * from admin;	Status: BLOCKED   
+[20/Jun/2023 11:53:47] User: green	Database: greendb	Query: grant select on info from son;	Status: BLOCKED   
+[20/Jun/2023 11:54:29] User: green	Database: greendb	Query: grant select on info to son;	Status: BLOCKED   
+[20/Jun/2023 11:55:15] User: son	Database: greendb	Query: SELECT if from info;	Status: BLOCKED   
+[20/Jun/2023 11:55:23] User: son	Database: greendb	Query: SELECT id from info;	Status: BLOCKED   
+[20/Jun/2023 13:25:22] User: son	Database: greendb	Query: SELECT id from info;	Status: BLOCKED   
+[20/Jun/2023 13:26:26] User: green	Database: greendb	Query: grant select on info from son;	Status: BLOCKED   
+[20/Jun/2023 13:27:14] User: son	Database: greendb	Query: SELECT id from info;	Status: BLOCKED   
+[20/Jun/2023 13:27:51] User: son	Database: greendb	Query: SELECT id from info where 1=1;	Status: BLOCKED   
+[20/Jun/2023 13:28:24] User: green	Database: greendb	Query: select id from info;	Status: BLOCKED   
+[20/Jun/2023 13:28:47] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[20/Jun/2023 13:29:17] User: green	Database: greendb	Query: SELECT n.nspname as "Schema",
+  c.relname as "Name",
+  CASE c.relkind WHEN 'r' THEN 'table' WHEN 'v' THEN 'view' WHEN 'm' THEN 'materialized view' WHEN 'i' THEN 'index' WHEN 'S' THEN 'sequence' WHEN 's' THEN 'special' WHEN 't' THEN 'TOAST table' WHEN 'f' THEN 'foreign table' WHEN 'p' THEN 'partitioned table' WHEN 'I' THEN 'partitioned index' END as "Type",
+  pg_catalog.pg_get_userbyid(c.relowner) as "Owner"
+FROM pg_catalog.pg_class c
+     LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+     LEFT JOIN pg_catalog.pg_am am ON am.oid = c.relam
+WHERE c.relkind IN ('r','p','')
+      AND n.nspname <> 'pg_catalog'
+      AND n.nspname !~ '^pg_toast'
+      AND n.nspname <> 'information_schema'
+  AND pg_catalog.pg_table_is_visible(c.oid)
+ORDER BY 1,2;	Status: BLOCKED   
+[20/Jun/2023 13:31:43] User: green	Database: greendb	Query: create table ad1(id int);	Status: BLOCKED   
+[20/Jun/2023 13:32:56] User: green	Database: greendb	Query: drop user ad1;	Status: BLOCKED   
+[20/Jun/2023 13:34:09] User: son	Database: greendb	Query: grant select on info from son;	Status: BLOCKED   
+[20/Jun/2023 13:34:37] User: son	Database: greendb	Query: drop user ad1;	Status: BLOCKED   
+[20/Jun/2023 13:35:28] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[20/Jun/2023 13:36:02] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[20/Jun/2023 13:45:07] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[20/Jun/2023 13:46:19] User: green	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[20/Jun/2023 13:52:39] User: green	Database: greendb	Query: select * from query;	Status: BLOCKED   
+[20/Jun/2023 13:53:16] User: son	Database: greendb	Query: SELECT * FROM query;	Status: BLOCKED   
+[21/Jun/2023 15:46:19] User: son	Database: greendb	Query: SELECT * from info;	Status: BLOCKED   
+[21/Jun/2023 16:22:24] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:23:35] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:25:47] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:26:23] User: nam	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:33:43] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:34:10] User: nam	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:36:10] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 16:36:41] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 17:23:23] User: green	Database: greendb	Query: SELECT id from info
+;	Status: BLOCKED   
+[21/Jun/2023 17:25:06] User: green	Database: greendb	Query: SELECT id from info
+;	Status: BLOCKED   
+[21/Jun/2023 18:58:54] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 19:03:00] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 19:07:20] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[21/Jun/2023 19:15:07] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[21/Jun/2023 19:16:10] User: nam	Database: greendb	Query: select * from info
+;	Status: WARN    
+[21/Jun/2023 19:35:25] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 15:25:32] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[22/Jun/2023 15:29:35] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 15:31:20] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 20:56:49] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 20:56:54] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 20:58:12] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 20:58:14] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:02:40] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:02:40] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:07:07] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:31:51] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:44:06] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:44:35] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:46:29] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[22/Jun/2023 21:52:42] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 10:12:00] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 10:20:13] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 10:30:11] User: nam	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 10:33:45] User: nam	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[23/Jun/2023 10:44:35] User: nam	Database: greendb	Query: SELECT * FROM admin;	Status: BLOCKED   
+[23/Jun/2023 10:47:05] User: nam	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[23/Jun/2023 10:49:29] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[23/Jun/2023 11:47:57] User: son	Database: greendb	Query: select * from admin;	Status: WARN    
+[23/Jun/2023 11:59:57] User: son	Database: greendb	Query: select * from admin;	Status: WARN    
+[23/Jun/2023 12:20:27] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[23/Jun/2023 12:23:26] User: son	Database: greendb	Query: SELECT * FROM INFO;	Status: WARN    
+[23/Jun/2023 12:27:32] User: son	Database: greendb	Query: SELECT * FROM info
+;	Status: WARN    
+[23/Jun/2023 12:28:22] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[23/Jun/2023 12:29:44] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[23/Jun/2023 12:31:35] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[23/Jun/2023 12:34:15] User: son	Database: greendb	Query: select * from info
+;	Status: WARN    
+[23/Jun/2023 12:38:34] User: son	Database: greendb	Query: SELECT id from info;	Status: WARN    
+[23/Jun/2023 12:41:02] User: son	Database: greendb	Query: select name from info;	Status: WARN    
+[23/Jun/2023 12:46:06] User: son	Database: greendb	Query: select name from info;	Status: WARN    
+[23/Jun/2023 12:53:17] User: son	Database: greendb	Query: SELECT name from info;	Status: WARN    
+[23/Jun/2023 13:00:16] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 13:04:03] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 13:13:03] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 14:20:31] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+ 
+[23/Jun/2023 14:29:15] User: nam	Database: greendb	Query: select * from info;	Status: BLOCKED   
+[23/Jun/2023 14:30:30] User: nam	Database: greendb	Query: select * from admin;	Status: BLOCKED   
+[23/Jun/2023 14:33:57] User: nam	Database: greendb	Query: select * from proxy;	Status: BLOCKED   
+[23/Jun/2023 14:38:36] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 14:48:38] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:00:08] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:13:31] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:16:53] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:18:16] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:19:29] User: nam	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:47:33] User: son	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:54:01] User: son	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 15:59:18] User: son	Database: greendb	Query: SELECT name from admin;	Status: BLOCKED   
+[23/Jun/2023 16:01:49] User: son	Database: greendb	Query: SELECT * FROM info;	Status: WARN    
+[23/Jun/2023 16:02:28] User: son	Database: greendb	Query: SELECT name from admin;	Status: WARN    
+[23/Jun/2023 16:11:12] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 16:12:01] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 16:13:55] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 16:18:18] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 16:24:56] User: son	Database: greendb	Query: SELECT name from info;	Status: WARN    
+[23/Jun/2023 16:30:23] User: son	Database: greendb	Query: SELECT name from info;	Status: WARN    
+[23/Jun/2023 21:10:16] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[23/Jun/2023 21:18:28] User: son	Database: greendb	Query: SELECT name from admin;	Status: WARN    
+[23/Jun/2023 21:19:00] User: son	Database: greendb	Query: SELECT name from info;	Status: WARN    
+[23/Jun/2023 21:55:12] User: nam	Database: greendb	Query: select * from info;	Status: BLOCKED     
+[23/Jun/2023 22:04:44] User: nam	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[23/Jun/2023 22:07:59] User: son	Database: greendb	Query: select * from info;	Status: WARN       
+[23/Jun/2023 22:10:13] User: son	Database: greendb	Query: select * from admin where id >=1 or 1=1;	Status: BLOCKED   
+[23/Jun/2023 22:12:48] User: green	Database: greendb	Query: revoke select on info from son;	Status: HIGH_RISK    
+[23/Jun/2023 22:13:55] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[24/Jun/2023 8:35:11] User: nam	Database: greendb	Query: select * from admin;	Status: HIGH_RISK    
+[24/Jun/2023 8:47:18] User: green	Database: greendb	Query: grant select on info to son;	Status: HIGH_RISK    
+[24/Jun/2023 8:49:46] User: nam	Database: greendb	Query: select * from admin;	Status: HIGH_RISK    
+[24/Jun/2023 8:53:20] User: green	Database: greendb	Query: select * from info;	Status: WARN      
+[24/Jun/2023 15:17:23] User: green	Database: greendb	Query: grant select on info to son;	Status: WARN    
+[24/Jun/2023 15:17:49] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[24/Jun/2023 15:18:26] User: green	Database: greendb	Query: REVOKE SELECT on info from son;	Status: WARN    
+[24/Jun/2023 15:18:34] User: son	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[24/Jun/2023 15:21:06] User: green	Database: greendb	Query: grant select on info to son;	Status: WARN    
+[24/Jun/2023 15:22:36] User: son	Database: greendb	Query: grant select on info to nam;	Status: WARN    
+[24/Jun/2023 15:24:27] User: son	Database: greendb	Query: select * from info;	Status: WARN    
+[24/Jun/2023 15:25:07] User: nam	Database: greendb	Query: select * from info;	Status: HIGH_RISK    
+[24/Jun/2023 15:49:11] User: son	Database: greendb	Query: grant select on info to nam;	Status: WARN    
+[25/Jun/2023 10:12:45] User: nam	[**] Database: greendb	[**] Query: select *from info;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 10:13:15] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 10:13:26] User: nam	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 10:18:31] User: nam	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 10:24:59] User: nam	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 10:27:41] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 10:41:09] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 10:50:20] User: nam	[**] Database: greendb	[**] Query: select name from admin where pwd ='' or 1=1;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 10:56:05] User: nam	[**] Database: greendb	[**] Query: select name from admin where pwd ='' or 1=1;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 10:57:16] User: nam	[**] Database: greendb	[**] Query: select * from admin;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 10:57:44] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: WARN    
+[25/Jun/2023 11:00:40] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: WARN    
+[25/Jun/2023 11:00:53] User: nam	[**] Database: greendb	[**] Query: select * from admin;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 11:03:44] User: nam	[**] Database: greendb	[**] Query: select * from admin;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 11:03:56] User: nam	[**] Database: greendb	[**] Query: select * from proxy;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 11:04:55] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: WARN    
+[25/Jun/2023 11:05:36] User: green	[**] Database: greendb	[**] Query: REVOEKE SELECT on info from son;	[**] Level_alert: WARN    
+[25/Jun/2023 11:06:08] User: green	[**] Database: greendb	[**] Query: REVOKE SELECT on info from son;	[**] Level_alert: WARN    
+[25/Jun/2023 11:06:14] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 11:13:05] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: HIGH_RISK    
+[25/Jun/2023 11:13:18] User: green	[**] Database: greendb	[**] Query: REVOKE SELECT on info from son;	[**] Level_alert: WARN      
+[25/Jun/2023 11:24:55] User: green	[**] Database: greendb	[**] Query: REVOEKE SELECT on info from son;	[**] Level_alert: WARN    
+[25/Jun/2023 12:02:27] User: green	[**] Database: greendb	[**] Query: REVOEKE SELECT on info from son;	[**] Level_alert: SQL_ERROR    
+[25/Jun/2023 12:02:56] User: nam	[**] Database: greendb	[**] Query: select * from proxy;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 12:03:15] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 12:03:35] User: green	[**] Database: greendb	[**] Query: grant SELECT on info to son;	[**] Level_alert: WARN    
+[25/Jun/2023 12:03:45] User: son	[**] Database: greendb	[**] Query: select name from info;	[**] Level_alert: WARN      
+[25/Jun/2023 12:09:49] User: green	[**] Database: greendb	[**] Query: grant update on info to son;	[**] Level_alert: WARN    
+[25/Jun/2023 12:23:08] User: green	[**] Database: greendb	[**] Query: revokke update on info from son;	[**] Level_alert: SQL_ERROR    
+[25/Jun/2023 13:08:37] User: green	[**] Database: greendb	[**] Query: revoke update on info from son;	[**] Level_alert: SQL_ERROR    
+[25/Jun/2023 13:09:55] User: green	[**] Database: greendb	[**] Query: grant update on info to son;	[**] Level_alert: SQL_ERROR    
+[25/Jun/2023 13:14:14] User: green	[**] Database: greendb	[**] Query: grant update on info to son;	[**] Level_alert: WARN    
+[25/Jun/2023 13:14:35] User: green	[**] Database: greendb	[**] Query: revoke update on info from son;	[**] Level_alert: WARN    
+[25/Jun/2023 13:14:50] User: green	[**] Database: greendb	[**] Query: revoke select on info from son;	[**] Level_alert: WARN    
+[25/Jun/2023 13:15:07] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 13:15:19] User: green	[**] Database: greendb	[**] Query: grant select  on info to son;	[**] Level_alert: WARN    
+[25/Jun/2023 13:15:23] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 13:15:28] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 13:17:05] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 13:21:24] User: green	[**] Database: greendb	[**] Query: grant select  on info to son;	[**] Level_alert: WARN    
+[25/Jun/2023 13:21:44] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 13:21:46] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[25/Jun/2023 13:25:26] User: green	[**] Database: greendb	[**] Query: revoke select on info from son;	[**] Level_alert: WARN    
+[25/Jun/2023 13:25:35] User: son	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 15:11:22] User: nam	[**] Database: greendb	[**] Query: select * from admin where id >=1 or 1=1
+;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 15:11:56] User: nam	[**] Database: greendb	[**] Query: select name from admin where pwd ='' or 1=1;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 15:12:04] User: nam	[**] Database: greendb	[**] Query: select name from admin where pwd ='' or 1=1;	[**] Level_alert: BLOCKED   
+[25/Jun/2023 15:12:30] User: son	[**] Database: greendb	[**] Query: select name from admin where true;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:19:16] User: green	[**] Database: greendb	[**] Query: grant select on info to son;	[**] Level_alert: WARN    
+[26/Jun/2023 16:19:46] User: green	[**] Database: greendb	[**] Query: grant select on info to nam;	[**] Level_alert: WARN    
+[26/Jun/2023 16:20:49] User: son	[**] Database: greendb	[**] Query: select id from info;	[**] Level_alert: WARN    
+[26/Jun/2023 16:21:19] User: nam	[**] Database: greendb	[**] Query: select * from info ;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:24:47] User: son	[**] Database: greendb	[**] Query: select select * from admin  where pwd = ' ' or 1=1;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:25:07] User: nam	[**] Database: greendb	[**] Query: select name from admin where pwd ='' or 1=1;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:26:47] User: son	[**] Database: greendb	[**] Query: select * from admin  where adminid > '1' or 1 = 1 union select name, pwd from admin;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:33:32] User: green	[**] Database: greendb	[**] Query: revoke select on info from nam;	[**] Level_alert: WARN    
+[26/Jun/2023 16:33:52] User: green	[**] Database: greendb	[**] Query: revoke select on query from son;	[**] Level_alert: WARN    
+[26/Jun/2023 16:34:37] User: nam	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:34:57] User: nam	[**] Database: greendb	[**] Query: select * from info where id = 1 or 1=1;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:35:13] User: son	[**] Database: greendb	[**] Query: select * from admin where true;	[**] Level_alert: BLOCKED   
+[26/Jun/2023 16:35:28] User: son	[**] Database: greendb	[**] Query: select * from query;	[**] Level_alert: BLOCKED     
+[28/Jun/2023 13:34:33] User: green	[**] Database: greendb	[**] Query: select * from info;	[**] Level_alert: WARN    
+[28/Jun/2023 15:44:18] User: green	[**] Database: greendb	[**] Query: select * from id;	[**] Level_alert: BLOCKED   
+[28/Jun/2023 15:46:01] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 17:56:07] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 18:32:42] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 19:04:02] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 19:04:51] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 19:07:56] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 19:15:13] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 20:27:52] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 20:28:48] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 20:31:26] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 20:48:08] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 21:42:28] User: green	[**] Database: greendb	[**] Query: select * from admin;	[**] Level_alert: WARN    
+[28/Jun/2023 22:06:37] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:08:10] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:09:54] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:14:41] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:16:01] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:17:29] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:18:46] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[28/Jun/2023 22:33:08] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 8:43:06] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 8:47:28] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 8:51:31] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 8:54:40] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 8:59:39] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '/home/sonnd/greensql-fw/db_cp/pgsql.sql', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 9:00:42] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 9:12:53] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 9:34:01] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 10:33:16] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 13:53:24] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 13:55:45] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:01:58] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:11:26] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:25:34] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:47:13] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:47:46] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:49:05] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '/home/sonnd/greensql-fw/db_cp/pgsql.sql', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:52:00] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('public', '/home/sonnd/greensql-fw/db_cp/pgsql.sql', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 15:53:33] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 16:00:32] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 16:12:52] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 16:14:06] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 20:46:17] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 21:23:55] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 21:27:03] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 21:52:08] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 21:59:21] User: green	[**] Database: greendb	[**] Query: select pg_catalog.set_config('search_path', '', false);	[**] Level_alert: BLOCKED   
+[29/Jun/2023 22:00:23] User: green	[**] Database: greendb	[**] Query: select has_function_privilege('green', 'pg_catalog.set_config(text, text, boolean)', 'execute');	[**] Level_alert: BLOCKED   
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.set_config('search_path', '', false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.pg_is_in_recovery()	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.set_config('search_path', '', false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET DATESTYLE = ISO	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET INTERVALSTYLE = POSTGRES	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET extra_float_digits TO 3	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET synchronize_seqscans TO off	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET statement_timeout = 0	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET lock_timeout = 0	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET idle_in_transaction_session_timeout = 0	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET row_security = off	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: BEGIN	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT x.tableoid, x.oid, x.extname, n.nspname, x.extrelocatable, x.extversion, x.extconfig, x.extcondition FROM pg_extension x JOIN pg_namespace n ON n.oid = x.extnamespace	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT classid, objid, refobjid FROM pg_depend WHERE refclassid = 'pg_extension'::regclass AND deptype = 'e' ORDER BY 3	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT n.tableoid, n.oid, n.nspname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = nspowner) AS rolname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(n.nspacl,pg_catalog.acldefault('n',n.nspowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('n',n.nspowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) as nspacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('n',n.nspowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(n.nspacl,pg_catalog.acldefault('n',n.nspowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) as rnspacl, NULL as initnspacl, NULL as initrnspacl FROM pg_namespace n LEFT JOIN pg_init_privs pip ON (n.oid = pip.objoid AND pip.classoid = 'pg_namespace'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT c.tableoid, c.oid, c.relname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(c.relacl,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS relacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(c.relacl,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) as rrelacl, NULL AS initrelacl, NULL as initrrelacl, c.relkind, c.relnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = c.relowner) AS rolname, c.relchecks, c.relhastriggers, c.relhasindex, c.relhasrules, 'f'::bool AS relhasoids, c.relrowsecurity, c.relforcerowsecurity, c.relfrozenxid, c.relminmxid, tc.oid AS toid, tc.relfrozenxid AS tfrozenxid, tc.relminmxid AS tminmxid, c.relpersistence, c.relispopulated, c.relreplident, c.relpages, am.amname, CASE WHEN c.relkind = 'f' THEN (SELECT ftserver FROM pg_catalog.pg_foreign_table WHERE ftrelid = c.oid) ELSE 0 END AS foreignserver, c.reloftype, d.refobjid AS owning_tab, d.refobjsubid AS owning_col, (SELECT spcname FROM pg_tablespace t WHERE t.oid = c.reltablespace) AS reltablespace, array_remove(array_remove(c.reloptions,'check_option=local'),'check_option=cascaded') AS reloptions, CASE WHEN 'check_option=local' = ANY (c.reloptions) THEN 'LOCAL'::text WHEN 'check_option=cascaded' = ANY (c.reloptions) THEN 'CASCADED'::text ELSE NULL END AS checkoption, tc.reloptions AS toast_reloptions, c.relkind = 'S' AND EXISTS (SELECT 1 FROM pg_depend WHERE classid = 'pg_class'::regclass AND objid = c.oid AND objsubid = 0 AND refclassid = 'pg_class'::regclass AND deptype = 'i') AS is_identity_sequence, EXISTS (SELECT 1 FROM pg_attribute at LEFT JOIN pg_init_privs pip ON (c.oid = pip.objoid AND pip.classoid = 'pg_class'::regclass AND pip.objsubid = at.attnum)WHERE at.attrelid = c.oid AND ((SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) IS NOT NULL OR (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) IS NOT NULL OR NULL IS NOT NULL OR NULL IS NOT NULL))AS changed_acl, c.relispartition AS ispartition FROM pg_class c LEFT JOIN pg_depend d ON (c.relkind = 'S' AND d.classid = c.tableoid AND d.objid = c.oid AND d.objsubid = 0 AND d.refclassid = c.tableoid AND d.deptype IN ('a', 'i')) LEFT JOIN pg_class tc ON (c.reltoastrelid = tc.oid AND c.relkind <> 'p') LEFT JOIN pg_am am ON (c.relam = am.oid) LEFT JOIN pg_init_privs pip ON (c.oid = pip.objoid AND pip.classoid = 'pg_class'::regclass AND pip.objsubid = 0) WHERE c.relkind in ('r', 'S', 'v', 'c', 'm', 'f', 'p') ORDER BY c.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.query IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.proxy IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.db_perm IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.admin IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.alert IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.alert_group IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.info IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:06] User: green	[**] Database: greendb	[**] Query: SELECT p.tableoid, p.oid, p.proname, p.prolang, p.pronargs, p.proargtypes, p.prorettype, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS proacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rproacl, NULL AS initproacl, NULL AS initrproacl, p.pronamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = p.proowner) AS rolname FROM pg_proc p LEFT JOIN pg_init_privs pip ON (p.oid = pip.objoid AND pip.classoid = 'pg_proc'::regclass AND pip.objsubid = 0) WHERE p.prokind <> 'a'
+  AND NOT EXISTS (SELECT 1 FROM pg_depend WHERE classid = 'pg_proc'::regclass AND objid = p.oid AND deptype = 'i')
+  AND (
+  pronamespace != (SELECT oid FROM pg_namespace WHERE nspname = 'pg_catalog')
+  OR EXISTS (SELECT 1 FROM pg_cast
+  WHERE pg_cast.oid > 16383 
+  AND p.oid = pg_cast.castfunc)
+  OR EXISTS (SELECT 1 FROM pg_transform
+  WHERE pg_transform.oid > 16383 AND 
+  (p.oid = pg_transform.trffromsql
+  OR p.oid = pg_transform.trftosql))
+  OR p.proacl IS DISTINCT FROM pip.initprivs)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.typname, t.typnamespace, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(t.typacl,pg_catalog.acldefault('T',t.typowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('T',t.typowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS typacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('T',t.typowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(t.typacl,pg_catalog.acldefault('T',t.typowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rtypacl, NULL AS inittypacl, NULL AS initrtypacl, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = t.typowner) AS rolname, t.typelem, t.typrelid, CASE WHEN t.typrelid = 0 THEN ' '::"char" ELSE (SELECT relkind FROM pg_class WHERE oid = t.typrelid) END AS typrelkind, t.typtype, t.typisdefined, t.typname[0] = '_' AND t.typelem != 0 AND (SELECT typarray FROM pg_type te WHERE oid = t.typelem) = t.oid AS isarray FROM pg_type t LEFT JOIN pg_init_privs pip ON (t.oid = pip.objoid AND pip.classoid = 'pg_type'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT l.tableoid, l.oid, l.lanname, l.lanpltrusted, l.lanplcallfoid, l.laninline, l.lanvalidator, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(l.lanacl,pg_catalog.acldefault('l',l.lanowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('l',l.lanowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS lanacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('l',l.lanowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(l.lanacl,pg_catalog.acldefault('l',l.lanowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rlanacl, NULL AS initlanacl, NULL AS initrlanacl, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = l.lanowner) AS lanowner FROM pg_language l LEFT JOIN pg_init_privs pip ON (l.oid = pip.objoid AND pip.classoid = 'pg_language'::regclass AND pip.objsubid = 0) WHERE l.lanispl ORDER BY l.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT p.tableoid, p.oid, p.proname AS aggname, p.pronamespace AS aggnamespace, p.pronargs, p.proargtypes, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = p.proowner) AS rolname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS aggacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS raggacl, NULL AS initaggacl, NULL AS initraggacl FROM pg_proc p LEFT JOIN pg_init_privs pip ON (p.oid = pip.objoid AND pip.classoid = 'pg_proc'::regclass AND pip.objsubid = 0) WHERE p.prokind = 'a' AND (p.pronamespace != (SELECT oid FROM pg_namespace WHERE nspname = 'pg_catalog') OR p.proacl IS DISTINCT FROM pip.initprivs)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, oprname, oprnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = oprowner) AS rolname, oprkind, oprcode::oid AS oprcode FROM pg_operator	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, amname, amtype, amhandler::pg_catalog.regproc AS amhandler FROM pg_am	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, opcname, opcnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = opcowner) AS rolname FROM pg_opclass	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, opfname, opfnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = opfowner) AS rolname FROM pg_opfamily	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, prsname, prsnamespace, prsstart::oid, prstoken::oid, prsend::oid, prsheadline::oid, prslextype::oid FROM pg_ts_parser	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, tmplname, tmplnamespace, tmplinit::oid, tmpllexize::oid FROM pg_ts_template	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, dictname, dictnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = dictowner) AS rolname, dicttemplate, dictinitoption FROM pg_ts_dict	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, cfgname, cfgnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = cfgowner) AS rolname, cfgparser FROM pg_ts_config	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT f.tableoid, f.oid, f.fdwname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = f.fdwowner) AS rolname, f.fdwhandler::pg_catalog.regproc, f.fdwvalidator::pg_catalog.regproc, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(f.fdwacl,pg_catalog.acldefault('F',f.fdwowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('F',f.fdwowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS fdwacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('F',f.fdwowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(f.fdwacl,pg_catalog.acldefault('F',f.fdwowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rfdwacl, NULL AS initfdwacl, NULL AS initrfdwacl, array_to_string(ARRAY(SELECT quote_ident(option_name) || ' ' || quote_literal(option_value) FROM pg_options_to_table(f.fdwoptions) ORDER BY option_name), E',
+    ') AS fdwoptions FROM pg_foreign_data_wrapper f LEFT JOIN pg_init_privs pip ON (f.oid = pip.objoid AND pip.classoid = 'pg_foreign_data_wrapper'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT f.tableoid, f.oid, f.srvname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = f.srvowner) AS rolname, f.srvfdw, f.srvtype, f.srvversion, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(f.srvacl,pg_catalog.acldefault('S',f.srvowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('S',f.srvowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS srvacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('S',f.srvowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(f.srvacl,pg_catalog.acldefault('S',f.srvowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rsrvacl, NULL AS initsrvacl, NULL AS initrsrvacl, array_to_string(ARRAY(SELECT quote_ident(option_name) || ' ' || quote_literal(option_value) FROM pg_options_to_table(f.srvoptions) ORDER BY option_name), E',
+    ') AS srvoptions FROM pg_foreign_server f LEFT JOIN pg_init_privs pip ON (f.oid = pip.objoid AND pip.classoid = 'pg_foreign_server'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT d.oid, d.tableoid, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = d.defaclrole) AS defaclrole, d.defaclnamespace, d.defaclobjtype, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(defaclacl,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS defaclacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(defaclacl,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rdefaclacl, NULL AS initdefaclacl, NULL AS initrdefaclacl FROM pg_default_acl d LEFT JOIN pg_init_privs pip ON (d.oid = pip.objoid AND pip.classoid = 'pg_default_acl'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, collname, collnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = collowner) AS rolname FROM pg_collation	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, conname, connamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = conowner) AS rolname FROM pg_conversion	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, castsource, casttarget, castfunc, castcontext, castmethod FROM pg_cast c WHERE NOT EXISTS ( SELECT 1 FROM pg_range r WHERE c.castsource = r.rngtypid AND c.casttarget = r.rngmultitypid ) ORDER BY 3,4	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, trftype, trflang, trffromsql::oid, trftosql::oid FROM pg_transform ORDER BY 3,4	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT inhrelid, inhparent FROM pg_inherits	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT e.tableoid, e.oid, evtname, evtenabled, evtevent, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = evtowner) AS evtowner, array_to_string(array(select quote_literal(x)  from unnest(evttags) as t(x)), ', ') as evttags, e.evtfoid::regproc as evtfname FROM pg_event_trigger e ORDER BY e.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT conrelid, confrelid FROM pg_constraint JOIN pg_depend ON (objid = confrelid) WHERE contype = 'f' AND refclassid = 'pg_extension'::regclass AND classid = 'pg_class'::regclass;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16801'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16801'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16813'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16813'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16828'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16828'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16841'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16841'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16851'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16851'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16866'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16866'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16888'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16888'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT partrelid FROM pg_partitioned_table WHERE
+(SELECT c.oid FROM pg_opclass c JOIN pg_am a ON c.opcmethod = a.oid
+WHERE opcname = 'enum_ops' AND opcnamespace = 'pg_catalog'::regnamespace AND amname = 'hash') = ANY(partclass)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:07] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16801'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16813'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16828'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16841'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16851'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16866'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, stxname, stxnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = stxowner) AS rolname, stxstattarget FROM pg_catalog.pg_statistic_ext	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, rulename, ev_class AS ruletable, ev_type, is_instead, ev_enabled FROM pg_rewrite ORDER BY oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT pol.oid, pol.tableoid, pol.polrelid, pol.polname, pol.polcmd, pol.polpermissive, CASE WHEN pol.polroles = '{0}' THEN NULL ELSE    pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(rolname) from pg_catalog.pg_roles WHERE oid = ANY(pol.polroles)), ', ') END AS polroles, pg_catalog.pg_get_expr(pol.polqual, pol.polrelid) AS polqual, pg_catalog.pg_get_expr(pol.polwithcheck, pol.polrelid) AS polwithcheck FROM unnest('{16801,16813,16828,16841,16851,16866,16888}'::pg_catalog.oid[]) AS src(tbloid)
+JOIN pg_catalog.pg_policy pol ON (src.tbloid = pol.polrelid)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT p.tableoid, p.oid, p.pubname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = p.pubowner) AS rolname, p.puballtables, p.pubinsert, p.pubupdate, p.pubdelete, p.pubtruncate, p.pubviaroot FROM pg_publication p	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, prpubid, prrelid FROM pg_catalog.pg_publication_rel	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT s.tableoid, s.oid, s.subname,
+ (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = s.subowner) AS rolname,
+ s.subconninfo, s.subslotname, s.subsynccommit,
+ s.subpublications,
+ s.subbinary,
+ s.substream
+FROM pg_subscription s
+WHERE s.subdbid = (SELECT oid FROM pg_database
+                   WHERE datname = current_database())	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: WITH RECURSIVE w AS ( SELECT d1.objid, d2.refobjid, c2.relkind AS refrelkind FROM pg_depend d1 JOIN pg_class c1 ON c1.oid = d1.objid AND c1.relkind = 'm' JOIN pg_rewrite r1 ON r1.ev_class = d1.objid JOIN pg_depend d2 ON d2.classid = 'pg_rewrite'::regclass AND d2.objid = r1.oid AND d2.refobjid <> d1.objid JOIN pg_class c2 ON c2.oid = d2.refobjid AND c2.relkind IN ('m','v') WHERE d1.classid = 'pg_class'::regclass UNION SELECT w.objid, d3.refobjid, c3.relkind FROM w JOIN pg_rewrite r3 ON r3.ev_class = w.refobjid JOIN pg_depend d3 ON d3.classid = 'pg_rewrite'::regclass AND d3.objid = r3.oid AND d3.refobjid <> w.refobjid JOIN pg_class c3 ON c3.oid = d3.refobjid AND c3.relkind IN ('m','v') ) SELECT 'pg_class'::regclass::oid AS classid, objid, refobjid FROM w WHERE refrelkind = 'm'	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT l.oid, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = l.lomowner) AS rolname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(l.lomacl,pg_catalog.acldefault('L',l.lomowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('L',l.lomowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS lomacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('L',l.lomowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(l.lomacl,pg_catalog.acldefault('L',l.lomowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rlomacl, NULL AS initlomacl, NULL AS initrlomacl FROM pg_largeobject_metadata l LEFT JOIN pg_init_privs pip ON (l.oid = pip.objoid AND pip.classoid = 'pg_largeobject'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT classid, objid, refclassid, refobjid, deptype FROM pg_depend WHERE deptype != 'p' AND deptype != 'e'
+UNION ALL
+SELECT 'pg_opfamily'::regclass AS classid, amopfamily AS objid, refclassid, refobjid, deptype FROM pg_depend d, pg_amop o WHERE deptype NOT IN ('p', 'e', 'i') AND classid = 'pg_amop'::regclass AND objid = o.oid AND NOT (refclassid = 'pg_opfamily'::regclass AND amopfamily = refobjid)
+UNION ALL
+SELECT 'pg_opfamily'::regclass AS classid, amprocfamily AS objid, refclassid, refobjid, deptype FROM pg_depend d, pg_amproc p WHERE deptype NOT IN ('p', 'e', 'i') AND classid = 'pg_amproc'::regclass AND objid = p.oid AND NOT (refclassid = 'pg_opfamily'::regclass AND amprocfamily = refobjid)
+ORDER BY 1,2	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.current_schemas(false)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:08] User: green	[**] Database: greendb	[**] Query: SELECT description, classoid, objoid, objsubid FROM pg_catalog.pg_description ORDER BY classoid, objoid, objsubid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:09] User: green	[**] Database: greendb	[**] Query: SELECT label, provider, classoid, objoid, objsubid FROM pg_catalog.pg_seclabel ORDER BY classoid, objoid, objsubid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:09] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16840'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:09] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16850'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16865'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16827'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT at.attname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS attacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rattacl, NULL AS initattacl, NULL AS initrattacl FROM pg_catalog.pg_attribute at JOIN pg_catalog.pg_class c ON (at.attrelid = c.oid) LEFT JOIN pg_catalog.pg_init_privs pip ON (at.attrelid = pip.objoid AND pip.classoid = 'pg_catalog.pg_class'::pg_catalog.regclass AND at.attnum = pip.objsubid) WHERE at.attrelid = '16888'::pg_catalog.oid AND NOT at.attisdropped AND ((SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) IS NOT NULL OR (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) IS NOT NULL OR NULL IS NOT NULL OR NULL IS NOT NULL)ORDER BY at.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16812'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16800'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.admin_adminid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.alert_alertid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.alert_group_agroupid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.db_perm_dbpid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.proxy_proxyid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.query_queryid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.admin (adminid, name, pwd, email) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.alert (alertid, agroupid, event_time, risk, block, dbuser, userip, query, reason) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.alert_group (agroupid, proxyid, db_name, update_time, status, pattern) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.db_perm (dbpid, proxyid, db_name, perms, perms2, status, sysdbtype, status_changed) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.info (id, name, pwd, email) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.proxy (proxyid, proxyname, frontend_ip, frontend_port, backend_server, backend_ip, backend_port, dbtype, status) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:10] User: green	[**] Database: greendb	[**] Query: COPY public.query (queryid, proxyid, perm, db_name, query) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.set_config('search_path', '', false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.pg_is_in_recovery()	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.set_config('search_path', '', false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET DATESTYLE = ISO	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET INTERVALSTYLE = POSTGRES	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET extra_float_digits TO 3	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET synchronize_seqscans TO off	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET statement_timeout = 0	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET lock_timeout = 0	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET idle_in_transaction_session_timeout = 0	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET row_security = off	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: BEGIN	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT x.tableoid, x.oid, x.extname, n.nspname, x.extrelocatable, x.extversion, x.extconfig, x.extcondition FROM pg_extension x JOIN pg_namespace n ON n.oid = x.extnamespace	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT classid, objid, refobjid FROM pg_depend WHERE refclassid = 'pg_extension'::regclass AND deptype = 'e' ORDER BY 3	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT n.tableoid, n.oid, n.nspname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = nspowner) AS rolname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(n.nspacl,pg_catalog.acldefault('n',n.nspowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('n',n.nspowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) as nspacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('n',n.nspowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(n.nspacl,pg_catalog.acldefault('n',n.nspowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) as rnspacl, NULL as initnspacl, NULL as initrnspacl FROM pg_namespace n LEFT JOIN pg_init_privs pip ON (n.oid = pip.objoid AND pip.classoid = 'pg_namespace'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:53] User: green	[**] Database: greendb	[**] Query: SELECT c.tableoid, c.oid, c.relname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(c.relacl,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS relacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(c.relacl,pg_catalog.acldefault(CASE WHEN c.relkind = 'S' THEN 's' ELSE 'r' END::"char",c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) as rrelacl, NULL AS initrelacl, NULL as initrrelacl, c.relkind, c.relnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = c.relowner) AS rolname, c.relchecks, c.relhastriggers, c.relhasindex, c.relhasrules, 'f'::bool AS relhasoids, c.relrowsecurity, c.relforcerowsecurity, c.relfrozenxid, c.relminmxid, tc.oid AS toid, tc.relfrozenxid AS tfrozenxid, tc.relminmxid AS tminmxid, c.relpersistence, c.relispopulated, c.relreplident, c.relpages, am.amname, CASE WHEN c.relkind = 'f' THEN (SELECT ftserver FROM pg_catalog.pg_foreign_table WHERE ftrelid = c.oid) ELSE 0 END AS foreignserver, c.reloftype, d.refobjid AS owning_tab, d.refobjsubid AS owning_col, (SELECT spcname FROM pg_tablespace t WHERE t.oid = c.reltablespace) AS reltablespace, array_remove(array_remove(c.reloptions,'check_option=local'),'check_option=cascaded') AS reloptions, CASE WHEN 'check_option=local' = ANY (c.reloptions) THEN 'LOCAL'::text WHEN 'check_option=cascaded' = ANY (c.reloptions) THEN 'CASCADED'::text ELSE NULL END AS checkoption, tc.reloptions AS toast_reloptions, c.relkind = 'S' AND EXISTS (SELECT 1 FROM pg_depend WHERE classid = 'pg_class'::regclass AND objid = c.oid AND objsubid = 0 AND refclassid = 'pg_class'::regclass AND deptype = 'i') AS is_identity_sequence, EXISTS (SELECT 1 FROM pg_attribute at LEFT JOIN pg_init_privs pip ON (c.oid = pip.objoid AND pip.classoid = 'pg_class'::regclass AND pip.objsubid = at.attnum)WHERE at.attrelid = c.oid AND ((SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) IS NOT NULL OR (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) IS NOT NULL OR NULL IS NOT NULL OR NULL IS NOT NULL))AS changed_acl, c.relispartition AS ispartition FROM pg_class c LEFT JOIN pg_depend d ON (c.relkind = 'S' AND d.classid = c.tableoid AND d.objid = c.oid AND d.objsubid = 0 AND d.refclassid = c.tableoid AND d.deptype IN ('a', 'i')) LEFT JOIN pg_class tc ON (c.reltoastrelid = tc.oid AND c.relkind <> 'p') LEFT JOIN pg_am am ON (c.relam = am.oid) LEFT JOIN pg_init_privs pip ON (c.oid = pip.objoid AND pip.classoid = 'pg_class'::regclass AND pip.objsubid = 0) WHERE c.relkind in ('r', 'S', 'v', 'c', 'm', 'f', 'p') ORDER BY c.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.query IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.proxy IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.db_perm IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.admin IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.alert IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.alert_group IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: LOCK TABLE public.info IN ACCESS SHARE MODE	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT p.tableoid, p.oid, p.proname, p.prolang, p.pronargs, p.proargtypes, p.prorettype, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS proacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rproacl, NULL AS initproacl, NULL AS initrproacl, p.pronamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = p.proowner) AS rolname FROM pg_proc p LEFT JOIN pg_init_privs pip ON (p.oid = pip.objoid AND pip.classoid = 'pg_proc'::regclass AND pip.objsubid = 0) WHERE p.prokind <> 'a'
+  AND NOT EXISTS (SELECT 1 FROM pg_depend WHERE classid = 'pg_proc'::regclass AND objid = p.oid AND deptype = 'i')
+  AND (
+  pronamespace != (SELECT oid FROM pg_namespace WHERE nspname = 'pg_catalog')
+  OR EXISTS (SELECT 1 FROM pg_cast
+  WHERE pg_cast.oid > 16383 
+  AND p.oid = pg_cast.castfunc)
+  OR EXISTS (SELECT 1 FROM pg_transform
+  WHERE pg_transform.oid > 16383 AND 
+  (p.oid = pg_transform.trffromsql
+  OR p.oid = pg_transform.trftosql))
+  OR p.proacl IS DISTINCT FROM pip.initprivs)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.typname, t.typnamespace, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(t.typacl,pg_catalog.acldefault('T',t.typowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('T',t.typowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS typacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('T',t.typowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(t.typacl,pg_catalog.acldefault('T',t.typowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rtypacl, NULL AS inittypacl, NULL AS initrtypacl, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = t.typowner) AS rolname, t.typelem, t.typrelid, CASE WHEN t.typrelid = 0 THEN ' '::"char" ELSE (SELECT relkind FROM pg_class WHERE oid = t.typrelid) END AS typrelkind, t.typtype, t.typisdefined, t.typname[0] = '_' AND t.typelem != 0 AND (SELECT typarray FROM pg_type te WHERE oid = t.typelem) = t.oid AS isarray FROM pg_type t LEFT JOIN pg_init_privs pip ON (t.oid = pip.objoid AND pip.classoid = 'pg_type'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT l.tableoid, l.oid, l.lanname, l.lanpltrusted, l.lanplcallfoid, l.laninline, l.lanvalidator, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(l.lanacl,pg_catalog.acldefault('l',l.lanowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('l',l.lanowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS lanacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('l',l.lanowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(l.lanacl,pg_catalog.acldefault('l',l.lanowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rlanacl, NULL AS initlanacl, NULL AS initrlanacl, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = l.lanowner) AS lanowner FROM pg_language l LEFT JOIN pg_init_privs pip ON (l.oid = pip.objoid AND pip.classoid = 'pg_language'::regclass AND pip.objsubid = 0) WHERE l.lanispl ORDER BY l.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT p.tableoid, p.oid, p.proname AS aggname, p.pronamespace AS aggnamespace, p.pronargs, p.proargtypes, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = p.proowner) AS rolname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS aggacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('f',p.proowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS raggacl, NULL AS initaggacl, NULL AS initraggacl FROM pg_proc p LEFT JOIN pg_init_privs pip ON (p.oid = pip.objoid AND pip.classoid = 'pg_proc'::regclass AND pip.objsubid = 0) WHERE p.prokind = 'a' AND (p.pronamespace != (SELECT oid FROM pg_namespace WHERE nspname = 'pg_catalog') OR p.proacl IS DISTINCT FROM pip.initprivs)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, oprname, oprnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = oprowner) AS rolname, oprkind, oprcode::oid AS oprcode FROM pg_operator	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, amname, amtype, amhandler::pg_catalog.regproc AS amhandler FROM pg_am	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, opcname, opcnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = opcowner) AS rolname FROM pg_opclass	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, opfname, opfnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = opfowner) AS rolname FROM pg_opfamily	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, prsname, prsnamespace, prsstart::oid, prstoken::oid, prsend::oid, prsheadline::oid, prslextype::oid FROM pg_ts_parser	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, tmplname, tmplnamespace, tmplinit::oid, tmpllexize::oid FROM pg_ts_template	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, dictname, dictnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = dictowner) AS rolname, dicttemplate, dictinitoption FROM pg_ts_dict	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, cfgname, cfgnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = cfgowner) AS rolname, cfgparser FROM pg_ts_config	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT f.tableoid, f.oid, f.fdwname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = f.fdwowner) AS rolname, f.fdwhandler::pg_catalog.regproc, f.fdwvalidator::pg_catalog.regproc, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(f.fdwacl,pg_catalog.acldefault('F',f.fdwowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('F',f.fdwowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS fdwacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('F',f.fdwowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(f.fdwacl,pg_catalog.acldefault('F',f.fdwowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rfdwacl, NULL AS initfdwacl, NULL AS initrfdwacl, array_to_string(ARRAY(SELECT quote_ident(option_name) || ' ' || quote_literal(option_value) FROM pg_options_to_table(f.fdwoptions) ORDER BY option_name), E',
+    ') AS fdwoptions FROM pg_foreign_data_wrapper f LEFT JOIN pg_init_privs pip ON (f.oid = pip.objoid AND pip.classoid = 'pg_foreign_data_wrapper'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT f.tableoid, f.oid, f.srvname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = f.srvowner) AS rolname, f.srvfdw, f.srvtype, f.srvversion, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(f.srvacl,pg_catalog.acldefault('S',f.srvowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('S',f.srvowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS srvacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('S',f.srvowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(f.srvacl,pg_catalog.acldefault('S',f.srvowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rsrvacl, NULL AS initsrvacl, NULL AS initrsrvacl, array_to_string(ARRAY(SELECT quote_ident(option_name) || ' ' || quote_literal(option_value) FROM pg_options_to_table(f.srvoptions) ORDER BY option_name), E',
+    ') AS srvoptions FROM pg_foreign_server f LEFT JOIN pg_init_privs pip ON (f.oid = pip.objoid AND pip.classoid = 'pg_foreign_server'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT d.oid, d.tableoid, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = d.defaclrole) AS defaclrole, d.defaclnamespace, d.defaclobjtype, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(defaclacl,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS defaclacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(defaclacl,pg_catalog.acldefault(CASE WHEN defaclnamespace = 0 THEN	  CASE WHEN defaclobjtype = 'S' THEN 's'::"char"	  ELSE defaclobjtype END ELSE NULL END,defaclrole))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rdefaclacl, NULL AS initdefaclacl, NULL AS initrdefaclacl FROM pg_default_acl d LEFT JOIN pg_init_privs pip ON (d.oid = pip.objoid AND pip.classoid = 'pg_default_acl'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, collname, collnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = collowner) AS rolname FROM pg_collation	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, conname, connamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = conowner) AS rolname FROM pg_conversion	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, castsource, casttarget, castfunc, castcontext, castmethod FROM pg_cast c WHERE NOT EXISTS ( SELECT 1 FROM pg_range r WHERE c.castsource = r.rngtypid AND c.casttarget = r.rngmultitypid ) ORDER BY 3,4	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, trftype, trflang, trffromsql::oid, trftosql::oid FROM pg_transform ORDER BY 3,4	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT inhrelid, inhparent FROM pg_inherits	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT e.tableoid, e.oid, evtname, evtenabled, evtevent, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = evtowner) AS evtowner, array_to_string(array(select quote_literal(x)  from unnest(evttags) as t(x)), ', ') as evttags, e.evtfoid::regproc as evtfname FROM pg_event_trigger e ORDER BY e.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT conrelid, confrelid FROM pg_constraint JOIN pg_depend ON (objid = confrelid) WHERE contype = 'f' AND refclassid = 'pg_extension'::regclass AND classid = 'pg_class'::regclass;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16801'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16801'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16813'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16813'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16828'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16828'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16841'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16841'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16851'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16851'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16866'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16866'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT
+a.attnum,
+a.attname,
+a.atttypmod,
+a.attstattarget,
+a.attstorage,
+t.typstorage,
+a.attnotnull,
+a.atthasdef,
+a.attisdropped,
+a.attlen,
+a.attalign,
+a.attislocal,
+pg_catalog.format_type(t.oid, a.atttypmod) AS atttypname,
+array_to_string(a.attoptions, ', ') AS attoptions,
+CASE WHEN a.attcollation <> t.typcollation THEN a.attcollation ELSE 0 END AS attcollation,
+a.attcompression AS attcompression,
+pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(option_name) || ' ' || pg_catalog.quote_literal(option_value) FROM pg_catalog.pg_options_to_table(attfdwoptions) ORDER BY option_name), E',
+    ') AS attfdwoptions,
+a.attidentity,
+CASE WHEN a.atthasmissing AND NOT a.attisdropped THEN a.attmissingval ELSE null END AS attmissingval,
+a.attgenerated
+FROM pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
+WHERE a.attrelid = '16888'::pg_catalog.oid AND a.attnum > 0::pg_catalog.int2
+ORDER BY a.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:54] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, adnum, pg_catalog.pg_get_expr(adbin, adrelid) AS adsrc FROM pg_catalog.pg_attrdef WHERE adrelid = '16888'::pg_catalog.oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT partrelid FROM pg_partitioned_table WHERE
+(SELECT c.oid FROM pg_opclass c JOIN pg_am a ON c.opcmethod = a.oid
+WHERE opcname = 'enum_ops' AND opcnamespace = 'pg_catalog'::regnamespace AND amname = 'hash') = ANY(partclass)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16801'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16813'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16828'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16841'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16851'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT t.tableoid, t.oid, t.relname AS indexname, inh.inhparent AS parentidx, pg_catalog.pg_get_indexdef(i.indexrelid) AS indexdef, i.indnkeyatts AS indnkeyatts, i.indnatts AS indnatts, i.indkey, i.indisclustered, i.indisreplident, c.contype, c.conname, c.condeferrable, c.condeferred, c.tableoid AS contableoid, c.oid AS conoid, pg_catalog.pg_get_constraintdef(c.oid, false) AS condef, (SELECT spcname FROM pg_catalog.pg_tablespace s WHERE s.oid = t.reltablespace) AS tablespace, t.reloptions AS indreloptions, (SELECT pg_catalog.array_agg(attnum ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatcols,(SELECT pg_catalog.array_agg(attstattarget ORDER BY attnum)   FROM pg_catalog.pg_attribute   WHERE attrelid = i.indexrelid AND     attstattarget >= 0) AS indstatvals FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class t ON (t.oid = i.indexrelid) JOIN pg_catalog.pg_class t2 ON (t2.oid = i.indrelid) LEFT JOIN pg_catalog.pg_constraint c ON (i.indrelid = c.conrelid AND i.indexrelid = c.conindid AND c.contype IN ('p','u','x')) LEFT JOIN pg_catalog.pg_inherits inh ON (inh.inhrelid = indexrelid) WHERE i.indrelid = '16866'::pg_catalog.oid AND (i.indisvalid OR t2.relkind = 'p') AND i.indisready ORDER BY indexname	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, stxname, stxnamespace, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = stxowner) AS rolname, stxstattarget FROM pg_catalog.pg_statistic_ext	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, rulename, ev_class AS ruletable, ev_type, is_instead, ev_enabled FROM pg_rewrite ORDER BY oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT pol.oid, pol.tableoid, pol.polrelid, pol.polname, pol.polcmd, pol.polpermissive, CASE WHEN pol.polroles = '{0}' THEN NULL ELSE    pg_catalog.array_to_string(ARRAY(SELECT pg_catalog.quote_ident(rolname) from pg_catalog.pg_roles WHERE oid = ANY(pol.polroles)), ', ') END AS polroles, pg_catalog.pg_get_expr(pol.polqual, pol.polrelid) AS polqual, pg_catalog.pg_get_expr(pol.polwithcheck, pol.polrelid) AS polwithcheck FROM unnest('{16801,16813,16828,16841,16851,16866,16888}'::pg_catalog.oid[]) AS src(tbloid)
+JOIN pg_catalog.pg_policy pol ON (src.tbloid = pol.polrelid)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT p.tableoid, p.oid, p.pubname, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = p.pubowner) AS rolname, p.puballtables, p.pubinsert, p.pubupdate, p.pubdelete, p.pubtruncate, p.pubviaroot FROM pg_publication p	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT tableoid, oid, prpubid, prrelid FROM pg_catalog.pg_publication_rel	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT s.tableoid, s.oid, s.subname,
+ (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = s.subowner) AS rolname,
+ s.subconninfo, s.subslotname, s.subsynccommit,
+ s.subpublications,
+ s.subbinary,
+ s.substream
+FROM pg_subscription s
+WHERE s.subdbid = (SELECT oid FROM pg_database
+                   WHERE datname = current_database())	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: WITH RECURSIVE w AS ( SELECT d1.objid, d2.refobjid, c2.relkind AS refrelkind FROM pg_depend d1 JOIN pg_class c1 ON c1.oid = d1.objid AND c1.relkind = 'm' JOIN pg_rewrite r1 ON r1.ev_class = d1.objid JOIN pg_depend d2 ON d2.classid = 'pg_rewrite'::regclass AND d2.objid = r1.oid AND d2.refobjid <> d1.objid JOIN pg_class c2 ON c2.oid = d2.refobjid AND c2.relkind IN ('m','v') WHERE d1.classid = 'pg_class'::regclass UNION SELECT w.objid, d3.refobjid, c3.relkind FROM w JOIN pg_rewrite r3 ON r3.ev_class = w.refobjid JOIN pg_depend d3 ON d3.classid = 'pg_rewrite'::regclass AND d3.objid = r3.oid AND d3.refobjid <> w.refobjid JOIN pg_class c3 ON c3.oid = d3.refobjid AND c3.relkind IN ('m','v') ) SELECT 'pg_class'::regclass::oid AS classid, objid, refobjid FROM w WHERE refrelkind = 'm'	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT l.oid, (SELECT rolname FROM pg_catalog.pg_roles WHERE oid = l.lomowner) AS rolname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(l.lomacl,pg_catalog.acldefault('L',l.lomowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('L',l.lomowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS lomacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('L',l.lomowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(l.lomacl,pg_catalog.acldefault('L',l.lomowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rlomacl, NULL AS initlomacl, NULL AS initrlomacl FROM pg_largeobject_metadata l LEFT JOIN pg_init_privs pip ON (l.oid = pip.objoid AND pip.classoid = 'pg_largeobject'::regclass AND pip.objsubid = 0) 	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT classid, objid, refclassid, refobjid, deptype FROM pg_depend WHERE deptype != 'p' AND deptype != 'e'
+UNION ALL
+SELECT 'pg_opfamily'::regclass AS classid, amopfamily AS objid, refclassid, refobjid, deptype FROM pg_depend d, pg_amop o WHERE deptype NOT IN ('p', 'e', 'i') AND classid = 'pg_amop'::regclass AND objid = o.oid AND NOT (refclassid = 'pg_opfamily'::regclass AND amopfamily = refobjid)
+UNION ALL
+SELECT 'pg_opfamily'::regclass AS classid, amprocfamily AS objid, refclassid, refobjid, deptype FROM pg_depend d, pg_amproc p WHERE deptype NOT IN ('p', 'e', 'i') AND classid = 'pg_amproc'::regclass AND objid = p.oid AND NOT (refclassid = 'pg_opfamily'::regclass AND amprocfamily = refobjid)
+ORDER BY 1,2	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.current_schemas(false)	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:55] User: green	[**] Database: greendb	[**] Query: SELECT description, classoid, objoid, objsubid FROM pg_catalog.pg_description ORDER BY classoid, objoid, objsubid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT label, provider, classoid, objoid, objsubid FROM pg_catalog.pg_seclabel ORDER BY classoid, objoid, objsubid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16840'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16850'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16865'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16827'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT at.attname, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) AS attacl, (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) AS rattacl, NULL AS initattacl, NULL AS initrattacl FROM pg_catalog.pg_attribute at JOIN pg_catalog.pg_class c ON (at.attrelid = c.oid) LEFT JOIN pg_catalog.pg_init_privs pip ON (at.attrelid = pip.objoid AND pip.classoid = 'pg_catalog.pg_class'::pg_catalog.regclass AND at.attnum = pip.objsubid) WHERE at.attrelid = '16888'::pg_catalog.oid AND NOT at.attisdropped AND ((SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS perm(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) AS init(init_acl) WHERE acl = init_acl)) as foo) IS NOT NULL OR (SELECT pg_catalog.array_agg(acl ORDER BY row_n) FROM (SELECT acl, row_n FROM pg_catalog.unnest(coalesce(pip.initprivs,pg_catalog.acldefault('c',c.relowner))) WITH ORDINALITY AS initp(acl,row_n) WHERE NOT EXISTS ( SELECT 1 FROM pg_catalog.unnest(coalesce(at.attacl,pg_catalog.acldefault('c',c.relowner))) AS permp(orig_acl) WHERE acl = orig_acl)) as foo) IS NOT NULL OR NULL IS NOT NULL OR NULL IS NOT NULL)ORDER BY at.attnum	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16812'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT format_type(seqtypid, NULL), seqstart, seqincrement, seqmax, seqmin, seqcache, seqcycle FROM pg_catalog.pg_sequence WHERE seqrelid = '16800'::oid	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.admin_adminid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.alert_alertid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.alert_group_agroupid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.db_perm_dbpid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.proxy_proxyid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: SELECT last_value, is_called FROM public.query_queryid_seq	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.admin (adminid, name, pwd, email) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.alert (alertid, agroupid, event_time, risk, block, dbuser, userip, query, reason) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.alert_group (agroupid, proxyid, db_name, update_time, status, pattern) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.db_perm (dbpid, proxyid, db_name, perms, perms2, status, sysdbtype, status_changed) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.info (id, name, pwd, email) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.proxy (proxyid, proxyname, frontend_ip, frontend_port, backend_server, backend_ip, backend_port, dbtype, status) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:16:56] User: green	[**] Database: greendb	[**] Query: COPY public.query (queryid, proxyid, perm, db_name, query) TO stdout;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET statement_timeout = 0;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET lock_timeout = 0;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET idle_in_transaction_session_timeout = 0;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET client_encoding = 'UTF8';	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET standard_conforming_strings = on;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.set_config('search_path', '', false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET check_function_bodies = false;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET xmloption = content;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET client_min_messages = warning;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET row_security = off;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET default_tablespace = '';	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SET default_table_access_method = heap;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.admin (
+    adminid integer NOT NULL,
+    name character varying(50) DEFAULT ''::character varying NOT NULL,
+    pwd character varying(50) DEFAULT ''::character varying NOT NULL,
+    email character varying(50) DEFAULT ''::character varying NOT NULL
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.admin OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE SEQUENCE public.admin_adminid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.admin_adminid_seq OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER SEQUENCE public.admin_adminid_seq OWNED BY public.admin.adminid;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.alert (
+    alertid integer NOT NULL,
+    agroupid integer DEFAULT 0,
+    event_time timestamp without time zone,
+    risk smallint DEFAULT '0'::smallint NOT NULL,
+    block smallint DEFAULT '0'::smallint NOT NULL,
+    dbuser character varying(50) DEFAULT ''::character varying NOT NULL,
+    userip character varying(50) DEFAULT ''::character varying NOT NULL,
+    query text NOT NULL,
+    reason text NOT NULL
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.alert OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE SEQUENCE public.alert_alertid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.alert_alertid_seq OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER SEQUENCE public.alert_alertid_seq OWNED BY public.alert.alertid;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.alert_group (
+    agroupid integer NOT NULL,
+    proxyid integer DEFAULT 1 NOT NULL,
+    db_name character varying(50) DEFAULT ''::character varying NOT NULL,
+    update_time timestamp without time zone,
+    status smallint DEFAULT 0 NOT NULL,
+    pattern text NOT NULL
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.alert_group OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE SEQUENCE public.alert_group_agroupid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.alert_group_agroupid_seq OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER SEQUENCE public.alert_group_agroupid_seq OWNED BY public.alert_group.agroupid;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.db_perm (
+    dbpid integer NOT NULL,
+    proxyid integer DEFAULT 0 NOT NULL,
+    db_name character varying(50) NOT NULL,
+    perms bigint DEFAULT '0'::bigint NOT NULL,
+    perms2 bigint DEFAULT '0'::bigint NOT NULL,
+    status smallint DEFAULT '0'::smallint NOT NULL,
+    sysdbtype character varying(20) DEFAULT 'user_db'::character varying NOT NULL,
+    status_changed timestamp without time zone
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.db_perm OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE SEQUENCE public.db_perm_dbpid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.db_perm_dbpid_seq OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER SEQUENCE public.db_perm_dbpid_seq OWNED BY public.db_perm.dbpid;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.info (
+    id integer,
+    name character varying(50) DEFAULT ''::character varying NOT NULL,
+    pwd character varying(50) DEFAULT ''::character varying NOT NULL,
+    email character varying(50) DEFAULT ''::character varying NOT NULL
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.info OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.proxy (
+    proxyid integer NOT NULL,
+    proxyname character varying(50) DEFAULT ''::character varying NOT NULL,
+    frontend_ip character varying(20) DEFAULT ''::character varying NOT NULL,
+    frontend_port smallint DEFAULT 0 NOT NULL,
+    backend_server character varying(50) DEFAULT ''::character varying NOT NULL,
+    backend_ip character varying(20) DEFAULT ''::character varying NOT NULL,
+    backend_port smallint DEFAULT 0 NOT NULL,
+    dbtype character varying(20) DEFAULT 'mysql'::character varying NOT NULL,
+    status smallint DEFAULT '1'::smallint NOT NULL
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.proxy OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE SEQUENCE public.proxy_proxyid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.proxy_proxyid_seq OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER SEQUENCE public.proxy_proxyid_seq OWNED BY public.proxy.proxyid;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE TABLE public.query (
+    queryid integer NOT NULL,
+    proxyid integer DEFAULT 0 NOT NULL,
+    perm smallint DEFAULT 1 NOT NULL,
+    db_name character varying(50) NOT NULL,
+    query text NOT NULL
+);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.query OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE SEQUENCE public.query_queryid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE public.query_queryid_seq OWNER TO green;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER SEQUENCE public.query_queryid_seq OWNED BY public.query.queryid;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.admin ALTER COLUMN adminid SET DEFAULT nextval('public.admin_adminid_seq'::regclass);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.alert ALTER COLUMN alertid SET DEFAULT nextval('public.alert_alertid_seq'::regclass);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.alert_group ALTER COLUMN agroupid SET DEFAULT nextval('public.alert_group_agroupid_seq'::regclass);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.db_perm ALTER COLUMN dbpid SET DEFAULT nextval('public.db_perm_dbpid_seq'::regclass);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.proxy ALTER COLUMN proxyid SET DEFAULT nextval('public.proxy_proxyid_seq'::regclass);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.query ALTER COLUMN queryid SET DEFAULT nextval('public.query_queryid_seq'::regclass);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.admin (adminid, name, pwd, email) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.alert (alertid, agroupid, event_time, risk, block, dbuser, userip, query, reason) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.alert_group (agroupid, proxyid, db_name, update_time, status, pattern) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.db_perm (dbpid, proxyid, db_name, perms, perms2, status, sysdbtype, status_changed) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.info (id, name, pwd, email) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.proxy (proxyid, proxyname, frontend_ip, frontend_port, backend_server, backend_ip, backend_port, dbtype, status) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: COPY public.query (queryid, proxyid, perm, db_name, query) FROM stdin;	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.setval('public.admin_adminid_seq', 1, true);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.setval('public.alert_alertid_seq', 1, false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.setval('public.alert_group_agroupid_seq', 1, false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.setval('public.db_perm_dbpid_seq', 3, true);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.setval('public.proxy_proxyid_seq', 2, true);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: SELECT pg_catalog.setval('public.query_queryid_seq', 1, false);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.admin
+    ADD CONSTRAINT admin_pkey PRIMARY KEY (adminid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.alert_group
+    ADD CONSTRAINT alert_group_pkey PRIMARY KEY (agroupid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.alert
+    ADD CONSTRAINT alert_pkey PRIMARY KEY (alertid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.db_perm
+    ADD CONSTRAINT db_perm_pkey PRIMARY KEY (dbpid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.proxy
+    ADD CONSTRAINT proxy_pkey PRIMARY KEY (proxyid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: ALTER TABLE ONLY public.query
+    ADD CONSTRAINT query_pkey PRIMARY KEY (queryid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE INDEX alert_agroupid_idx ON public.alert USING btree (agroupid);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE INDEX alert_group_idx ON public.alert_group USING btree (update_time);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE INDEX db_perm_idx ON public.db_perm USING btree (proxyid, db_name);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: CREATE INDEX query_idx ON public.query USING btree (proxyid, db_name);	[**] Level_alert: WARN    
+[29/Jun/2023 22:21:57] User: green	[**] Database: greendb	[**] Query: GRANT SELECT ON TABLE public.info TO son;	[**] Level_alert: WARN    
+[05/Jul/2023 17:04:58] User: green [**] Database: greendb [**] Query: SELECT * FROM info; [**] Level_alert: WARN    
+[05/Jul/2023 17:05:30] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: WARN    
+[05/Jul/2023 17:07:05] User: son [**] Database: greendb [**] Query: select * from info; [**] Level_alert: WARN    
+[05/Jul/2023 17:07:57] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: WARN    
+[05/Jul/2023 17:09:53] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: WARN    
+[05/Jul/2023 17:14:49] User: nam [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: WARN    
+[05/Jul/2023 17:17:46] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: WARN    
+[05/Jul/2023 17:22:33] User: son [**] Database: greendb [**] Query: SELECT name from admin; [**] Level_alert: WARN    
+[05/Jul/2023 20:35:18] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: BLOCKED   
+[05/Jul/2023 20:35:29] User: son [**] Database: greendb [**] Query: select * from info; [**] Level_alert: BLOCKED   
+[05/Jul/2023 20:38:34] User: son [**] Database: greendb [**] Query: select * from info; [**] Level_alert: BLOCKED   
+[05/Jul/2023 20:38:41] User: son [**] Database: greendb [**] Query: select * from admin; [**] Level_alert: BLOCKED   
