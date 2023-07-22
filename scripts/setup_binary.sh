@@ -18,7 +18,7 @@ else
     cp ../greensql-fw /sbin/
 fi
 /etc/init.d/greensql start
-tail -f /var/log/greensql.log
+tail -f /var/log/fagodb.log
 tail -f var/log/alert.log
 tail -f var/log/event.log
 echo "done..."

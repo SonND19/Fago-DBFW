@@ -1,4 +1,4 @@
-/var/log/greensql.log {
+/var/log/fagodb.log {
         daily
         size 10M
         missingok

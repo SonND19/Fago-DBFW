@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
         fix_dir_name(conf_path);	
 	if (cfg->load(conf_path) == false)
 	{
-        fprintf(stderr, "Failed to load config file: %s/greensql.conf\n\n", 
+        fprintf(stderr, "Failed to load config file: %s/fagodb.conf\n\n", 
 			    conf_path.c_str());
 	    fprintf(stderr, "Specify location of the conf. file using \"-p\" parameter.\n\n");
 	    fprintf(stderr, "Usage: %s -p DIRECTORY\n\n", argv[0]);

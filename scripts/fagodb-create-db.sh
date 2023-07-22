@@ -6,12 +6,12 @@
 #
 
 VER=1.3.0
-SQL="mysql"
-GREENSQL_DB_USER="green"
+SQL="database type"
+GREENSQL_DB_USER="user"
 GREENSQL_DB_PWD="pwd"
-GREENSQL_DB_NAME="greendb"
-CONF="/etc/greensql/greensql.conf"
-CONFWEB="/usr/share/greensql-fw/config.php"
+GREENSQL_DB_NAME="database"
+CONF="/etc/fagodb/fagodb.conf"
+CONFWEB="/usr/share/Fago-DBFW/config.php"
 MY_CNF=""
 MRO=""
 
@@ -40,36 +40,19 @@ if [ ! -z $PSQL ]; then
   echo "postgresql binary file located: $PSQL"
 fi
 
-# if [ -d /usr/share/doc/greensql-fw-$VER/ ]; then
-#   DOCDIR="/home/sonnd/greensql-fw/docs"
-#   # DOCDIR="/usr/share/doc/greensql-fw-$VER"
-# elif [ -d /usr/share/doc/greensql-fw/ ]; then
-# DOCDIR="/home/sonnd/greensql-fw/docs"
-#   # DOCDIR="/usr/share/doc/greensql-fw"
-# elif [ -d /usr/share/doc/packages/greensql-fw/ ]; then
-# DOCDIR="/home/sonnd/greensql-fw/docs"
-#   # DOCDIR="/usr/share/doc/packages/greensql-fw/"
-# else
-#   echo "No Doc Dir Found."
-#   echo "Probably greensql-fw is not installed"
-#   echo ""
-#   exit 1;
-# fi
-if [ -d /usr/share/doc/greensql-fw-$VER/ ]; then
-  DOCDIR="/home/sonnd/greensql-fw/docs"
-  # DOCDIR="/usr/share/doc/greensql-fw-$VER"
-elif [ -d /home/sonnd/greensql-fw/docs/ ]; then
-DOCDIR="/home/sonnd/greensql-fw/docs"
-  # DOCDIR="/usr/share/doc/greensql-fw"
-elif [ -d /usr/share/doc/packages/greensql-fw/ ]; then
-DOCDIR="/home/sonnd/greensql-fw/docs"
-  # DOCDIR="/usr/share/doc/packages/greensql-fw/"
+if [ -d /usr/share/doc/Fago-DBFW-$VER/ ]; then
+  DOCDIR="/usr/share/doc/Fago-DBFW-$VER"
+elif [ -d /usr/share/doc/Fago-DBFW/ ]; then
+  DOCDIR="/usr/share/doc/Fago-DBFW"
+elif [ -d /usr/share/doc/packages/Fago-DBFW/ ]; then
+  DOCDIR="/usr/share/doc/packages/Fago-DBFW/"
 else
   echo "No Doc Dir Found."
   echo "Probably greensql-fw is not installed"
   echo ""
   exit 1;
 fi
+
 ###############################
 ## PgSQL Authentication Type ##
 ###############################
@@ -785,7 +768,7 @@ update_greensql_config()
   # save start and end of the config file
   start_cfg=`perl -p0777 -e 's/\[database\].*$//s' $CONF`
   end_cfg=`perl -p0777 -e 's/^.*\[database\][^\[]*\[/\[/s' $CONF`
-
+  echo "hi"
   echo "$start_cfg
 
 [database]" > $CONF

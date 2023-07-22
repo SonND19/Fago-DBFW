@@ -75,7 +75,7 @@ void GreenSQLConfig::init()
     
     log_level = 3;
 
-    log_file = "/var/log/greensql.log";
+    log_file = "/var/log/fagodb.log";
     // file_log = "/home/sonnd/greensql-fw/src/query.txt";
     // file_alert = "/home/sonnd/greensql-fw/alert.txt";
     // file_event = "/home/sonnd/greensql-fw/event.txt";
@@ -89,7 +89,7 @@ bool GreenSQLConfig::load(std::string & path)
     cfg_file.reserve(1024); 
     std::cout << "load\n";
     cfg_file = path;
-    cfg_file += "greensql.conf";
+    cfg_file += "fagodb.conf";
     
     std::ifstream file(cfg_file.c_str());
     std::string line;
