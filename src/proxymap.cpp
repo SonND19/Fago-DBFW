@@ -5,7 +5,7 @@
 // License: GPL v2 (http://www.gnu.org/licenses/gpl.html)
 //
 
-#include "greensql.hpp"
+#include "proxy.hpp"
 #include "proxymap.hpp"
 #include "mysql/mysql_con.hpp"
 #include "pgsql/pgsql_con.hpp"
@@ -16,7 +16,7 @@
 static const char * const q_proxy = "SELECT proxyid, frontend_ip, frontend_port, backend_server, "
             "backend_ip, backend_port, dbtype FROM proxy WHERE status != 3";
         
-static std::map<int, GreenSQL * > proxies;
+static std::map<int, Proxy * > proxies;
 
 void wrap_Server(int fd, short which, void * arg)
 {
@@ -26,7 +26,7 @@ void wrap_Server(int fd, short which, void * arg)
     logevent(NET_DEBUG, "[%d]wrap_Server\n", proxy_id);
     GreenSQLConfig * conf = GreenSQLConfig::getInstance();
     
-    GreenSQL * cls = proxies[proxy_id];
+    Proxy * cls = proxies[proxy_id];
     Connection * conn = NULL;
     int sfd;
     int cfd;
@@ -63,7 +63,7 @@ void wrap_Proxy(int fd, short which, void * arg)
 
     if (conf->bRunning == false)
     {
-        GreenSQL * cls = proxies[proxy_id];
+        Proxy * cls = proxies[proxy_id];
         if (cls){
             std::cout << "wrap_Proxy1\n";
             cls->Close();
@@ -87,7 +87,7 @@ void wrap_Backend(int fd, short which, void * arg)
     std::cout << "wrap_backend\n";
     if (conf->bRunning == false)
     {
-        GreenSQL * cls = proxies[proxy_id];
+        Proxy * cls = proxies[proxy_id];
         if (cls)
         {std::cout << "wrap_backend1\n";
             cls->Close();
@@ -111,8 +111,8 @@ bool proxymap_init()
 
 bool proxymap_close()
 {
-    std::map<int, GreenSQL * >::iterator iter;
-    GreenSQL * cls = NULL;
+    std::map<int, Proxy * >::iterator iter;
+    Proxy * cls = NULL;
 
     while (proxies.size() != 0)
     {
@@ -129,11 +129,11 @@ bool proxymap_close()
 
 bool proxymap_reload()
 {
-    std::map<int, GreenSQL * > new_proxies;
-    std::map<int, GreenSQL * >::iterator itr;
+    std::map<int, Proxy * > new_proxies;
+    std::map<int, Proxy * >::iterator itr;
 
     db_struct db;
-    GreenSQL * cls = NULL;
+    Proxy * cls = NULL;
     bool ret;
 
     std::string backendIP;
@@ -174,7 +174,7 @@ bool proxymap_reload()
         if (itr == proxies.end())
         {
             /** proxy doesnt exist in memory so create a new one **/
-            cls = new GreenSQL();		
+            cls = new Proxy();		
             bool ret = cls->ProxyInit(proxy_id, proxyIP, proxyPort, backendName, backendIP, backendPort, dbType);
             if (ret == false)
             {

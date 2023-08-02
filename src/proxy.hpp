@@ -12,6 +12,7 @@
 #include "dbpermobj.hpp"
 #include "log.hpp"
 #include "config.hpp"
+#include "socket.hpp"
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -27,30 +28,27 @@ bool ProxyValidateClientRequest(Connection*);
 bool ProxyValidateServerResponse(Connection*);
 void Backend_cb(int fd, short which, void * arg);
 bool Backend_write_cb(int fd, Connection * conn);
-bool socket_read(int fd, char * data, int & size);
-bool socket_write(int fd, const char* data, int & size);
 void CloseConnection(Connection * conn);
 void clear_init_event(Connection * conn, int fd, short flags, pt2Func func, void * params,bool proxy = true);
+
 static std::string query_check = " ";
 // static DBBlockLevel status = WARN;
-class GreenSQL
+class Proxy
 {
-    
-
 public:
 
-    GreenSQL();
+    Proxy();
 
-    virtual ~GreenSQL(void);
+    virtual ~Proxy(void);
     
-    //socket
-    int server_socket(std::string & ip, int port);
-    int client_socket(std::string & server, int port);
-    int socket_accept(int serverfd);
-    int static socket_close(int sfd);
-    //bool socket_read(int fd, char * data, int & size);
-    //bool socket_write(int fd, const char* data, int & size);
-    int new_socket();
+    // //socket
+    // int server_socket(std::string & ip, int port);
+    // int client_socket(std::string & server, int port);
+    // int socket_accept(int serverfd);
+    // int static socket_close(int sfd);
+    // //bool socket_read(int fd, char * data, int & size);
+    // //bool socket_write(int fd, const char* data, int & size);
+    // int new_socket();
     
     //proxy
     bool ProxyInit(int proxyId, std::string & proxyIp, int proxyPort,

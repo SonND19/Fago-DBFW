@@ -10,15 +10,13 @@
 #include "compat.hpp"
 #endif
 
-#include "greensql.hpp"
-
+#include "proxy.hpp"
 // #include "config.hpp"
 // #include "connection.hpp"
 #include "proxymap.hpp"
 
 
 #include <string.h>
-
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -37,29 +35,31 @@
 #include <errno.h>
 
 static const int min_buf_size = 10240;
-
-GreenSQL::GreenSQL()
-{std::cout << "GreenSQL\n";
+// void enable_event_writer(Connection * conn, bool proxy);
+// void disable_event_writer(Connection * conn, bool proxy);
+Proxy::Proxy()
+{
     memset(&serverEvent, 0, sizeof(struct event));
     //v_conn.reserve(10);
 }
 
-GreenSQL::~GreenSQL(void)
+Proxy::~Proxy(void)
 {
     //logevent(DEBUG, "i am in GreenSQL destructor\n");
 }
 
-bool GreenSQL::PrepareNewConn(int fd, int & sfd, int & cfd)
+bool Proxy::PrepareNewConn(int fd, int & sfd, int & cfd)
 {
+    Socket socket;
     //logevent(NET_DEBUG, "server socket fired, fd=%d\n",fd);
-    sfd = socket_accept(fd);
+    sfd = socket.socket_accept(fd);
     if (sfd == -1)
         return false;
 
-    cfd = client_socket(sBackendIP.empty() ? sBackendName : sBackendIP, iBackendPort);
+    cfd = socket.client_socket(sBackendIP.empty() ? sBackendName : sBackendIP, iBackendPort);
     if (cfd == -1)
     {std::cout << "PrepareNewConn1\n";
-        socket_close(sfd);
+        socket.socket_close(sfd);
         logevent(NET_DEBUG, "Failed to connect to backend db server (%s:%d)\n", sBackendName.c_str(), iBackendPort);
         return false;
     }
@@ -68,7 +68,7 @@ bool GreenSQL::PrepareNewConn(int fd, int & sfd, int & cfd)
     return true;
 }
 
-void GreenSQL::Server_cb(int fd, short which, void * arg, 
+void Proxy::Server_cb(int fd, short which, void * arg, 
      Connection * conn, int sfd, int cfd)
 {
     struct sockaddr_storage ss;
@@ -110,311 +110,6 @@ void GreenSQL::Server_cb(int fd, short which, void * arg,
 #endif
 }
 
-
-int GreenSQL::server_socket(std::string & ip, int port)
-{
-    int sfd;
-    // std::cout << "server_soket\n";
-    struct sockaddr_in addr;
-#ifdef WIN32
-	const char* flags,*ling;
-#else
-    int flags =1;
-	struct linger ling = {0, 0};
-    // std::cout << "server_soket1\n";
-#endif
-    if ((sfd = new_socket()) == -1) {
-        std::cout << "server_soket2\n";
-        return -1;
-    }
-#ifdef WIN32
-	setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, flags, sizeof(flags));
-	setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, flags, sizeof(flags));
-	setsockopt(sfd, SOL_SOCKET, SO_LINGER, ling, sizeof(ling));
-	setsockopt(sfd, IPPROTO_TCP, TCP_NODELAY, flags, sizeof(flags));
-#else
-    setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &flags, sizeof(flags));
-    setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, &flags, sizeof(flags));
-    setsockopt(sfd, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
-    setsockopt(sfd, IPPROTO_TCP, TCP_NODELAY, &flags, sizeof(flags));
-#endif
-    memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-    //addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_addr.s_addr = inet_addr(ip.c_str());
-    std::cout << "server_soket3\n";
-    if (bind(sfd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
-        logevent(NET_DEBUG, "Failed to bind server socket on %s:%d\n", ip.c_str(), port);
-        socket_close(sfd);
-        return -1;
-    }
-    
-    if (listen(sfd, 1024) == -1) {
-        logevent(NET_DEBUG, "Failed to switch socket to listener mode\n");
-        socket_close(sfd);
-        return -1;
-    }
-    std::cout << "server_soket_end\n";
-    return sfd;
-}
-
-int GreenSQL::client_socket(std::string & server, int port)
-{std::cout << "client_socket\n";
-    int sfd;
-    struct sockaddr_in addr;
-#ifdef WIN32
-	const char* flags,*ling;
-#else
-    int flags =1;
-    struct linger ling = {0, 0};
-#endif 
-    if ((sfd = new_socket()) == -1) {
-        return -1;
-    }
-#ifdef WIN32
-	setsockopt(sfd, SOL_SOCKET, SO_LINGER, ling, sizeof(ling));
-	setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, flags, sizeof(flags));
-#else
-    setsockopt(sfd, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
-    setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, &flags, sizeof(flags));
-#endif
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = inet_addr(server.c_str());
-      
-    if (connect(sfd, (struct sockaddr *) &addr, sizeof(addr)) == -1)
-    {
-#ifndef WIN32
-        if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINPROGRESS) {
-            return sfd;
-        } else if (errno == EMFILE) {
-            logevent(NET_DEBUG, "[%d] Failed to connect to backend server, too many open sockets\n", sfd);
-        } else {
-            logevent(NET_DEBUG, "[%d] Failed to connect to backend server\n", sfd);
-        }
-#endif
-        socket_close(sfd);
-        return -1;
-    }
-    return sfd;
-}
-
-int GreenSQL::socket_accept(int serverfd)
-{
-    socklen_t addrlen;
-    struct sockaddr addr;
-    int sfd;
-#ifdef WIN32
-	const char* flags,*ling;
-#else
-    int flags = 1;
-    struct linger ling = {0, 0};
-#endif   
-    memset(&addr, 0, sizeof(addr));
-    addrlen = sizeof(addr);
-
-    if ((sfd = (int)accept(serverfd, &addr, &addrlen)) == -1) {
-#ifndef WIN32
-        if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINPROGRESS) {
-            return sfd;
-        } else if (errno == EMFILE) {
-            logevent(NET_DEBUG, "[%d] Failed to accept client socket, too many open sockets\n", serverfd);
-        } else {
-            logevent(NET_DEBUG, "[%d] Failed to accept client socket\n", serverfd);
-        }
-#endif
-        socket_close(sfd);
-        return -1;
-    }
-#ifdef WIN32
-	setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, flags, sizeof(flags));
-	setsockopt(sfd, SOL_SOCKET, SO_LINGER, ling, sizeof(ling));
-#else
-    setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, &flags, sizeof(flags));
-    setsockopt(sfd, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
-  
-    if ((flags = fcntl(sfd, F_GETFL, 0)) < 0 ||
-         fcntl(sfd, F_SETFL, flags | O_NONBLOCK) < 0) {
-        logevent(NET_DEBUG, "[%d] Failed to swith socket to non-blocking mode\n", sfd);
-        socket_close(sfd);
-        return -1;
-    }
-#endif 
-    return sfd;
-}
-
-int GreenSQL::socket_close(int sfd)
-{
-#ifndef WIN32
-    close(sfd);
-#endif
-    return 0;
-}
-
-bool socket_read(int fd, char * data, int & size)
-{
-    if ((size = recv(fd, data, size, 0)) < 0)
-    {
-        size = 0;
-        logevent(NET_DEBUG, "[%d] Socket read error %d\n", fd, errno);
-#ifndef WIN32
-        if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINPROGRESS) {
-           return true;
-        }
-#endif
-        return false;
-    }
-    if (size == 0)
-    {
-       logevent(NET_DEBUG, "[%d] Socket read error %d\n", fd, errno);
-       return false;
-    }
-                   
-    return true; 
-}
-
-bool socket_write(int fd, const char* data, int & size)
-{std::cout << "socket_write\n";
-    logevent(NET_DEBUG, "Socket_write\n");
-    if ((size = send(fd, data, size, 0))  <= 0)
-    {
-#ifdef WIN32
-        int err = WSAGetLastError();
-        logevent(NET_DEBUG, "[%d] Socket write error %d\n", fd, err);
-        if (err == WSAEINTR || err == WSAEWOULDBLOCK || err == WSAEINPROGRESS ) {
-            size = 0;
-            return true;
-        }
-#else
-        logevent(NET_DEBUG, "[%d] Socket write error %d\n", fd, errno);
-        if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINPROGRESS) {
-           size = 0;
-           std::cout << "socket_write1\n";
-           return true;
-        }
-#endif
-        std::cout << "socket_write2\n";
-        return false;
-    }
-    std::cout << "socket_write3\n";
-    return true;
-  
-}
-
-int GreenSQL::new_socket() {
-    int sfd;
-
-#ifdef WIN32
-    unsigned long nonblock  = 1;
-    SOCKET sock;
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        logevent(NET_DEBUG, "Failed to create socket\n");
-        return -1;
-    }
-
-    if (ioctlsocket(sock, FIONBIO, &nonblock) == SOCKET_ERROR)
-    {
-        logevent(NET_DEBUG, "[%d] Failed to swith socket to non-blocking mode\n", sock);
-        socket_close((int)sock);
-        return -1;
-    }
-    sfd = (int) sock;
-#else
-
-    if ((sfd = (int)socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        logevent(NET_DEBUG, "Failed to create socket\n");
-        return -1;
-    }
-
-    int flags;
-    if ((flags = fcntl(sfd, F_GETFL, 0)) < 0 || 
-         fcntl(sfd, F_SETFL, flags | O_NONBLOCK) < 0)
-    {
-        logevent(NET_DEBUG, "[%d] Failed to swith socket to non-blocking mode\n", sfd);
-        socket_close(sfd);
-        return -1;
-    }
-#endif
-    return sfd;
-}
-
-
-bool GreenSQL::ProxyInit(int proxyId, std::string & proxyIp, int proxyPort,
-        std::string & backendName, std::string & backendIp, int backendPort, std::string & dbType)
-{   std::cout << "ProxyInit\n";
-    iProxyId = proxyId;   
-    sProxyIP = proxyIp;
-    iProxyPort = proxyPort;
-    sBackendName = backendName;
-    sBackendIP = backendIp;
-    iBackendPort = backendPort;
-    iProxyId = proxyId;
-    sDBType = dbType;
-    if (strcasecmp(dbType.c_str(), "mysql") == 0)
-    {
-        DBType = DBTypeMySQL;
-    } else if (strcasecmp(dbType.c_str(), "pgsql") == 0)
-    {
-        DBType = DBTypePGSQL;
-    } 
-	else
-    {
-        DBType = DBTypeMySQL;
-    }
-    int sfd = server_socket(sProxyIP, iProxyPort);
-    if (sfd == -1)
-        return false;
-#ifndef WIN32
-    event_set(&serverEvent, sfd, EV_READ | EV_WRITE | EV_PERSIST,
-              wrap_Server, (void *)iProxyId);
-
-    event_add(&serverEvent, 0); 
-#endif
-    return true;
-}
-
-bool GreenSQL::ProxyReInit(int proxyId, std::string & proxyIp, int proxyPort,
-        std::string & backendName, std::string & backendIp, int backendPort,
-        std::string & dbType)
-{
-    if (ServerInitialized())
-    {
-#ifndef WIN32
-        event_del(&serverEvent);
-        std::cout << "ProxyReInit\n";
-#endif
-        socket_close(serverEvent.ev_fd);
-        serverEvent.ev_fd = 0;
-        std::cout << "ProxyReInit1\n";
-    }
-    return ProxyInit(proxyId, proxyIp, proxyPort, backendName, backendIp, backendPort, dbType);
-}
-
-// this function returns true if server socket is established
-bool GreenSQL::ServerInitialized()
-{
-    if (serverEvent.ev_fd != 0 && serverEvent.ev_fd != -1) 
-        return true;
-    return false;
-}
-
-// this function returns true of we have open active connections
-bool GreenSQL::HasActiveConnections()
-{
-    return !v_conn.empty();
-}
-
-void clear_init_event(Connection * conn, int fd, short flags, pt2Func func,bool proxy)
-{
-  struct event *connection = proxy? &conn->proxy_event : &conn->backend_event;
-#ifndef WIN32
-  event_del( connection);
-  event_set( connection, fd, flags, func, (void *)conn);
-  event_add( connection, 0);
-#endif
-}
-
 void enable_event_writer(Connection * conn, bool proxy)
 {
   struct event *writer = proxy? &conn->proxy_event_writer : &conn->backend_event_writer;
@@ -428,6 +123,7 @@ void enable_event_writer(Connection * conn, bool proxy)
 #endif
       logevent(NET_DEBUG, "Try again add write event,active flag: fd: %d\n",writer->ev_fd);
   }
+}
 }
 
 void disable_event_writer(Connection * conn, bool proxy)
@@ -448,6 +144,85 @@ void disable_event_writer(Connection * conn, bool proxy)
     }
   }
 }
+
+bool Proxy::ProxyInit(int proxyId, std::string & proxyIp, int proxyPort,
+        std::string & backendName, std::string & backendIp, int backendPort, std::string & dbType)
+{   
+    Socket socket;
+    iProxyId = proxyId;   
+    sProxyIP = proxyIp;
+    iProxyPort = proxyPort;
+    sBackendName = backendName;
+    sBackendIP = backendIp;
+    iBackendPort = backendPort;
+    iProxyId = proxyId;
+    sDBType = dbType;
+    if (strcasecmp(dbType.c_str(), "mysql") == 0)
+    {
+        DBType = DBTypeMySQL;
+    } else if (strcasecmp(dbType.c_str(), "pgsql") == 0)
+    {
+        DBType = DBTypePGSQL;
+    } 
+	else
+    {
+        DBType = DBTypeMySQL;
+    }
+    int sfd = socket.server_socket(sProxyIP, iProxyPort);
+    if (sfd == -1)
+        return false;
+#ifndef WIN32
+    event_set(&serverEvent, sfd, EV_READ | EV_WRITE | EV_PERSIST,
+              wrap_Server, (void *)iProxyId);
+
+    event_add(&serverEvent, 0); 
+#endif
+    return true;
+}
+
+bool Proxy::ProxyReInit(int proxyId, std::string & proxyIp, int proxyPort,
+        std::string & backendName, std::string & backendIp, int backendPort,
+        std::string & dbType)
+{
+    Socket socket;
+    if (ServerInitialized())
+    {
+#ifndef WIN32
+        event_del(&serverEvent);
+        std::cout << "ProxyReInit\n";
+#endif
+        socket.socket_close(serverEvent.ev_fd);
+        serverEvent.ev_fd = 0;
+        std::cout << "ProxyReInit1\n";
+    }
+    return ProxyInit(proxyId, proxyIp, proxyPort, backendName, backendIp, backendPort, dbType);
+}
+
+// this function returns true if server socket is established
+bool Proxy::ServerInitialized()
+{
+    if (serverEvent.ev_fd != 0 && serverEvent.ev_fd != -1) 
+        return true;
+    return false;
+}
+
+// this function returns true of we have open active connections
+bool Proxy::HasActiveConnections()
+{
+    return !v_conn.empty();
+}
+
+void clear_init_event(Connection * conn, int fd, short flags, pt2Func func,bool proxy)
+{
+  struct event *connection = proxy? &conn->proxy_event : &conn->backend_event;
+#ifndef WIN32
+  event_del( connection);
+  event_set( connection, fd, flags, func, (void *)conn);
+  event_add( connection, 0);
+#endif
+}
+
+
 
 
 void Proxy_cb(int fd, short which, void * arg)
@@ -632,7 +407,7 @@ bool Backend_write_cb(int fd, Connection * conn)
 	else 
 	{
 		if(conn->first_response)
-		{std::cout << "Backend_write_cb3\n";
+		{
 			enable_event_writer(conn,false); 
 			return true;
 		}
@@ -672,7 +447,7 @@ bool ProxyValidateServerResponse( Connection * conn )
     return Proxy_write_cb( conn->proxy_event.ev_fd, conn);
 }
 
-void GreenSQL::Close()
+void Proxy::Close()
 {
     //check if we have initialized server socket
     proxymap_set_db_status(iProxyId,0);
@@ -691,11 +466,12 @@ void GreenSQL::Close()
     //logevent(NET_DEBUG, "Closing proxy object\n");
 }
 
-void GreenSQL::CloseServer()
+void Proxy::CloseServer()
 {
+    Socket socket;
     if (ServerInitialized())
     {//std::cout << "closeserver\n";
-        socket_close(serverEvent.ev_fd);
+        socket.socket_close(serverEvent.ev_fd);
 #ifndef WIN32
         event_del(&serverEvent);
 #endif

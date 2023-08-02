@@ -6,7 +6,7 @@
 //
 
 #include "connection.hpp"
-#include "greensql.hpp"
+#include "proxy.hpp"
 #include "normalization.hpp"
 #include "riskengine.hpp"
 #include "misc.hpp"
@@ -36,18 +36,16 @@ bool Connection::close()
 #ifndef WIN32
     logevent(NET_DEBUG, "connection close(), proxy socket %d, backend socket %d\n", 
               proxy_event.ev_fd, backend_event.ev_fd);
-    GreenSQL::socket_close(proxy_event.ev_fd);
-    GreenSQL::socket_close(backend_event.ev_fd);
-    if (proxy_event.ev_fd != 0 && proxy_event.ev_fd != -1)// && proxy_event.ev_flags & EVLIST_INIT)
+    Socket::socket_close(proxy_event.ev_fd);
+    Socket::socket_close(backend_event.ev_fd);
+    if (proxy_event.ev_fd != 0 && proxy_event.ev_fd != -1)
         event_del(&proxy_event);
     if (proxy_event_writer.ev_fd != 0 && proxy_event_writer.ev_fd != -1 )//&&
-                //proxy_event_writer.ev_flags & EVLIST_INIT && proxy_event_writer.ev_flags & EVLIST_INSERTED)
         event_del(&proxy_event_writer);
 
-    if (backend_event.ev_fd != 0 && backend_event.ev_fd != -1)// && backend_event.ev_flags & EVLIST_INIT)
+    if (backend_event.ev_fd != 0 && backend_event.ev_fd != -1)
         event_del(&backend_event);
-    if (backend_event_writer.ev_fd != 0 && backend_event_writer.ev_fd != -1 )//&&
-                //backend_event_writer.ev_flags & EVLIST_INIT && backend_event_writer.ev_flags & EVLIST_INSERTED )
+    if (backend_event_writer.ev_fd != 0 && backend_event_writer.ev_fd != -1 )
         event_del(&backend_event_writer);
     connections->erase(location);
 #endif

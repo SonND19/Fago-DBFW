@@ -1,4 +1,6 @@
-OBJS:=main.o buffer.o greensql.o config.o connection.o normalization.o log.o proxymap.o dbmap.o patterns.o misc.o riskengine.o dbpermobj.o alert.o mysql/mysql_con.o pgsql/pgsql_con.o sql_api.o
+OBJS:=main.o buffer.o proxy.o config.o connection.o normalization.o log.o proxymap.o dbmap.o patterns.o misc.o \
+		riskengine.o dbpermobj.o alert.o mysql/mysql_con.o pgsql/pgsql_con.o sql_api.o\
+		socket.o
 
 CPP=g++
 CFLAGS:=-g -Wall -D_REENTRANT -O2

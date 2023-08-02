@@ -23,7 +23,7 @@
 #include <event.h>
 
 #include "config.hpp"
-#include "greensql.hpp"
+#include "proxy.hpp"
 #include "mysql/mysql_con.hpp"
 #include "pgsql/pgsql_con.hpp"
 #include "proxymap.hpp"
